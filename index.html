@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Screendial — Native Desktop Copilot</title>
-    
+
     <!-- Tailwind CSS & Lucide Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <!-- Google Fonts: Plus Jakarta Sans with a full range of weights (light to extra bold) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -54,7 +57,7 @@
             backdrop-filter: blur(30px) saturate(100%);
             -webkit-backdrop-filter: blur(30px) saturate(100%);
             border: 1px solid var(--glass-border);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
                 0 10px 30px -10px rgba(0, 0, 0, 0.8);
         }
@@ -74,6 +77,7 @@
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden antialiased relative">
 
     <!-- Subtle, deep specular radial backlights to define glass depth -->
@@ -91,17 +95,12 @@
                 Screendial
             </span>
         </div>
-        
-        <!-- Red status indicator with fine text -->
-        <div class="flex items-center space-x-2 px-3 py-1 rounded bg-[#121214] border border-white/5">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#ff334b]"></span>
-            <span class="text-[9px] font-bold tracking-widest text-[#a1a1a6] uppercase">Active Build</span>
-        </div>
+
     </header>
 
     <!-- 2. HERO & MAIN CONTENT -->
     <main class="w-full max-w-4xl mx-auto px-6 flex-grow flex flex-col justify-center items-center py-12 relative z-10">
-        
+
         <div class="text-center space-y-10 w-full">
 
             <!-- Huge Bolder Headline & Finer Subtitle -->
@@ -117,22 +116,25 @@
             <!-- Finer Description -->
             <div class="max-w-xl mx-auto">
                 <p class="text-xs sm:text-sm text-[#a1a1a6] font-light leading-relaxed tracking-wide">
-                    An intelligent screen overlay designed to guide you through complex workflows step-by-step. Screendial coordinates automated actions, glides your cursor, and renders contextual instructions directly on top of any application.
+                    An intelligent screen overlay designed to guide you through complex workflows step-by-step.
+                    Screendial coordinates automated actions, glides your cursor, and renders contextual instructions
+                    directly on top of any application.
                 </p>
             </div>
 
             <!-- Download Button Section (DMG + Coming Soon) -->
             <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 max-w-md mx-auto pt-2">
-                
+
                 <!-- macOS .dmg Download -->
-                <a href="./Screendial.dmg" download 
-                   class="w-full sm:w-auto px-8 py-3.5 rounded btn-action-red flex items-center justify-center space-x-2.5 text-white text-xs font-extrabold tracking-widest uppercase">
+                <a href="./Screendial.dmg" download
+                    class="w-full sm:w-auto px-8 py-3.5 rounded btn-action-red flex items-center justify-center space-x-2.5 text-white text-xs font-extrabold tracking-widest uppercase">
                     <i data-lucide="download" class="w-3.5 h-3.5 text-white stroke-[2.5]"></i>
                     <span>Download for macOS</span>
                 </a>
 
                 <!-- Windows Coming Soon -->
-                <div class="w-full sm:w-auto px-8 py-3.5 rounded btn-action-outline flex items-center justify-center space-x-2.5 text-xs font-bold tracking-widest uppercase">
+                <div
+                    class="w-full sm:w-auto px-8 py-3.5 rounded btn-action-outline flex items-center justify-center space-x-2.5 text-xs font-bold tracking-widest uppercase">
                     <i data-lucide="monitor" class="w-3.5 h-3.5 opacity-30"></i>
                     <span>Windows <span class="text-[9px] opacity-50 ml-1">(Soon)</span></span>
                 </div>
@@ -140,7 +142,7 @@
 
             <!-- Sleek Feature Cards Grid (Strict Grey, Black, White, Red dots) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto text-left pt-12">
-                
+
                 <!-- Feature 1 -->
                 <div class="p-6 rounded glass-card flex items-start space-x-4">
                     <div class="p-2 rounded bg-white/5 text-white shrink-0 mt-0.5 border border-white/5">
@@ -149,7 +151,8 @@
                     <div>
                         <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Transparent HUD</h3>
                         <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Frameless, transparent fullscreen HUD overlay. Passes mouse clicks directly through transparent areas while anchoring highlights directly above on-screen elements.
+                            Frameless, transparent fullscreen HUD overlay. Passes mouse clicks directly through
+                            transparent areas while anchoring highlights directly above on-screen elements.
                         </p>
                     </div>
                 </div>
@@ -160,9 +163,11 @@
                         <i data-lucide="mouse-pointer" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Bézier Cursor Gliding</h3>
+                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Bézier Cursor Gliding
+                        </h3>
                         <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Smooth, human-like mouse automation. Coordinates movements along customized curve trajectories with simulated native clicking to highlight target controls.
+                            Smooth, human-like mouse automation. Coordinates movements along customized curve
+                            trajectories with simulated native clicking to highlight target controls.
                         </p>
                     </div>
                 </div>
@@ -175,7 +180,8 @@
                     <div>
                         <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Contextual Skills</h3>
                         <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Active application tracking. Dynamically captures screen context and active foreground processes (DaVinci Resolve, Safari, VS Code) to surface custom actions.
+                            Active application tracking. Dynamically captures screen context and active foreground
+                            processes (DaVinci Resolve, Safari, VS Code) to surface custom actions.
                         </p>
                     </div>
                 </div>
@@ -186,9 +192,11 @@
                         <i data-lucide="layers" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Executable Tool Widgets</h3>
+                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Executable Tool Widgets
+                        </h3>
                         <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Interactive, frame-perfect checklist overlays, control gauges, and command palettes. Clear overlays or trigger recordings instantly using global shortcut hotkeys.
+                            Interactive, frame-perfect checklist overlays, control gauges, and command palettes. Clear
+                            overlays or trigger recordings instantly using global shortcut hotkeys.
                         </p>
                     </div>
                 </div>
@@ -200,7 +208,8 @@
     </main>
 
     <!-- 3. FOOTER -->
-    <footer class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] text-[#5e5e64] font-semibold tracking-[0.25em] uppercase">
+    <footer
+        class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] text-[#5e5e64] font-semibold tracking-[0.25em] uppercase">
         <div>
             <span>Screendial v0.1.0</span>
         </div>
@@ -214,4 +223,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>
