@@ -140,6 +140,23 @@
                 </div>
             </div>
 
+            <!-- macOS Gatekeeper Installation Instructions -->
+            <div class="max-w-md mx-auto p-4 rounded glass-card text-left mt-6 border border-white/5 space-y-2">
+                <div class="flex items-center space-x-2 text-[#ff334b]">
+                    <i data-lucide="shield-alert" class="w-4 h-4 shrink-0"></i>
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider">macOS Gatekeeper Warning Fix</span>
+                </div>
+                <p class="text-[11px] text-[#a1a1a6] leading-relaxed font-light">
+                    If macOS claims the app is <i>"damaged"</i> after dragging it to your Applications folder, open your <b>Terminal</b> and run this command to authorize it:
+                </p>
+                <div class="flex items-center justify-between bg-black/40 border border-white/5 rounded px-2.5 py-1.5 font-mono text-[10px] text-white">
+                    <code id="bypass-cmd" class="select-all">xattr -cr /Applications/Screendial.app</code>
+                    <button id="copy-cmd-btn" class="text-white hover:text-[#ff334b] transition-colors p-1 shrink-0" title="Copy command">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+
             <!-- Sleek Feature Cards Grid (Strict Grey, Black, White, Red dots) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto text-left pt-12">
 
@@ -221,6 +238,27 @@
     <!-- Initialize Lucide Icons -->
     <script>
         lucide.createIcons();
+
+        // Copy Terminal command handler
+        const copyBtn = document.getElementById('copy-cmd-btn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const cmdText = document.getElementById('bypass-cmd').innerText;
+                navigator.clipboard.writeText(cmdText).then(() => {
+                    const icon = copyBtn.querySelector('[data-lucide]');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'check');
+                        lucide.createIcons();
+                        setTimeout(() => {
+                            icon.setAttribute('data-lucide', 'copy');
+                            lucide.createIcons();
+                        }, 2000);
+                    }
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            });
+        }
     </script>
 </body>
 
