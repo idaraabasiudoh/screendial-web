@@ -19,7 +19,7 @@ DEST_DIR="/Applications"
 DEST_APP="$DEST_DIR/Screendial.app"
 TEMP_DMG="/tmp/Screendial_Download.dmg"
 MOUNT_POINT="/Volumes/Screendial"
-DMG_URL="https://idaraabasiudoh.github.io/screendial-web/Screendial.dmg"
+DMG_URL="https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/Screendial.dmg"
 
 # Cleanup any previous incomplete runs
 rm -f "$TEMP_DMG"
