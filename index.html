@@ -122,38 +122,56 @@
                 </p>
             </div>
 
-            <!-- Download Button Section (DMG + Coming Soon) -->
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 max-w-md mx-auto pt-2">
+            <!-- Download Button Section (DMG + Terminal Installer) -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 max-w-xl mx-auto pt-2">
 
                 <!-- macOS .dmg Download -->
                 <a href="./Screendial.dmg" download
-                    class="w-full sm:w-auto px-8 py-3.5 rounded btn-action-red flex items-center justify-center space-x-2.5 text-white text-xs font-extrabold tracking-widest uppercase">
+                    class="w-full sm:w-auto px-6 py-3.5 rounded btn-action-red flex items-center justify-center space-x-2.5 text-white text-xs font-extrabold tracking-widest uppercase">
                     <i data-lucide="download" class="w-3.5 h-3.5 text-white stroke-[2.5]"></i>
-                    <span>Download for macOS</span>
+                    <span>Download DMG</span>
+                </a>
+
+                <!-- macOS Self-Extracting Installer -->
+                <a href="./Screendial-Installer.sh" download
+                    class="w-full sm:w-auto px-6 py-3.5 rounded border border-white/10 hover:border-white/20 bg-white/5 flex items-center justify-center space-x-2.5 text-white text-xs font-extrabold tracking-widest uppercase transition-colors">
+                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-[#ff334b] stroke-[2.5]"></i>
+                    <span>Terminal Installer</span>
                 </a>
 
                 <!-- Windows Coming Soon -->
                 <div
-                    class="w-full sm:w-auto px-8 py-3.5 rounded btn-action-outline flex items-center justify-center space-x-2.5 text-xs font-bold tracking-widest uppercase">
+                    class="w-full sm:w-auto px-6 py-3.5 rounded btn-action-outline flex items-center justify-center space-x-2.5 text-xs font-bold tracking-widest uppercase">
                     <i data-lucide="monitor" class="w-3.5 h-3.5 opacity-30"></i>
                     <span>Windows <span class="text-[9px] opacity-50 ml-1">(Soon)</span></span>
                 </div>
             </div>
 
             <!-- macOS Gatekeeper Installation Instructions -->
-            <div class="max-w-md mx-auto p-4 rounded glass-card text-left mt-6 border border-white/5 space-y-2">
+            <div class="max-w-md mx-auto p-4 rounded glass-card text-left mt-6 border border-white/5 space-y-3">
                 <div class="flex items-center space-x-2 text-[#ff334b]">
                     <i data-lucide="shield-alert" class="w-4 h-4 shrink-0"></i>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider">macOS Gatekeeper Warning Fix</span>
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider">macOS Installation Guide</span>
                 </div>
-                <p class="text-[11px] text-[#a1a1a6] leading-relaxed font-light">
-                    If macOS claims the app is <i>"damaged"</i> after dragging it to your Applications folder, open your <b>Terminal</b> and run this command to authorize it:
-                </p>
-                <div class="flex items-center justify-between bg-black/40 border border-white/5 rounded px-2.5 py-1.5 font-mono text-[10px] text-white">
-                    <code id="bypass-cmd" class="select-all">xattr -cr /Applications/Screendial.app</code>
-                    <button id="copy-cmd-btn" class="text-white hover:text-[#ff334b] transition-colors p-1 shrink-0" title="Copy command">
-                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                    </button>
+                <div class="space-y-2 text-[11px] text-[#a1a1a6] leading-relaxed font-light">
+                    <p>
+                        <b>Option A (Automated):</b> Download the <b>Terminal Installer</b>, open your Terminal, and run:
+                    </p>
+                    <div class="flex items-center justify-between bg-black/40 border border-white/5 rounded px-2.5 py-1.5 font-mono text-[10px] text-white">
+                        <code id="installer-cmd" class="select-all">bash ~/Downloads/Screendial-Installer.sh</code>
+                        <button id="copy-installer-btn" class="text-white hover:text-[#ff334b] transition-colors p-1 shrink-0" title="Copy command">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                    <p class="pt-1">
+                        <b>Option B (Manual DMG):</b> Download the <b>DMG</b>, drag Screendial to Applications, and if you get a <i>"damaged"</i> message, clear it by running:
+                    </p>
+                    <div class="flex items-center justify-between bg-black/40 border border-white/5 rounded px-2.5 py-1.5 font-mono text-[10px] text-white">
+                        <code id="bypass-cmd" class="select-all">xattr -cr /Applications/Screendial.app</code>
+                        <button id="copy-cmd-btn" class="text-white hover:text-[#ff334b] transition-colors p-1 shrink-0" title="Copy command">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -239,26 +257,29 @@
     <script>
         lucide.createIcons();
 
-        // Copy Terminal command handler
-        const copyBtn = document.getElementById('copy-cmd-btn');
-        if (copyBtn) {
-            copyBtn.addEventListener('click', () => {
-                const cmdText = document.getElementById('bypass-cmd').innerText;
-                navigator.clipboard.writeText(cmdText).then(() => {
-                    const icon = copyBtn.querySelector('[data-lucide]');
-                    if (icon) {
-                        icon.setAttribute('data-lucide', 'check');
-                        lucide.createIcons();
-                        setTimeout(() => {
-                            icon.setAttribute('data-lucide', 'copy');
+        // Copy Handler Helper
+        function setupCopy(buttonId, textId) {
+            const btn = document.getElementById(buttonId);
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    const text = document.getElementById(textId).innerText;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const icon = btn.querySelector('[data-lucide]');
+                        if (icon) {
+                            icon.setAttribute('data-lucide', 'check');
                             lucide.createIcons();
-                        }, 2000);
-                    }
-                }).catch(err => {
-                    console.error('Failed to copy: ', err);
+                            setTimeout(() => {
+                                icon.setAttribute('data-lucide', 'copy');
+                                lucide.createIcons();
+                            }, 2000);
+                        }
+                    }).catch(err => console.error('Failed to copy: ', err));
                 });
-            });
+            }
         }
+
+        setupCopy('copy-installer-btn', 'installer-cmd');
+        setupCopy('copy-cmd-btn', 'bypass-cmd');
     </script>
 </body>
 
