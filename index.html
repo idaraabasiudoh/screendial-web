@@ -11,26 +11,21 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        display: ['"Playfair Display"', 'Georgia', 'serif'],
-                        body: ['"DM Sans"', 'system-ui', 'sans-serif'],
+                        luxury: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                        body: ['"Inter"', 'system-ui', 'sans-serif'],
                     },
                     colors: {
-                        clay: '#1a1410',
-                        parchment: '#f5efe6',
-                        sand: '#d4c5a9',
-                        terracotta: '#c4693d',
-                        rust: '#a0522d',
-                        sage: '#7a8b6f',
-                        olive: '#5c6b4e',
-                        ochre: '#cc9544',
-                        ink: '#2c2416',
+                        volt: '#efff00',
+                        void: '#0a0a0f',
+                        slate: '#14141c',
+                        mist: '#e8e8f0',
                     }
                 }
             }
@@ -39,282 +34,340 @@
 
     <style>
         :root {
-            --clay: #1a1410;
-            --parchment: #f5efe6;
-            --sand: #d4c5a9;
-            --terracotta: #c4693d;
-            --rust: #a0522d;
-            --sage: #7a8b6f;
-            --ochre: #cc9544;
-            --ink: #2c2416;
-            --glass-bg: rgba(245, 239, 230, 0.06);
-            --glass-border: rgba(212, 197, 169, 0.12);
+            --volt: #efff00;
+            --volt-dim: rgba(239, 255, 0, 0.15);
+            --volt-glow: rgba(239, 255, 0, 0.06);
+            --void: #0a0a0f;
+            --slate: #14141c;
+            --mist: #e8e8f0;
+            --mist-dim: rgba(232, 232, 240, 0.5);
+            --mist-faint: rgba(232, 232, 240, 0.25);
+            --glass-bg: rgba(239, 255, 0, 0.03);
+            --glass-border: rgba(239, 255, 0, 0.08);
         }
 
         body {
-            background-color: var(--clay);
-            color: var(--parchment);
-            font-family: "DM Sans", system-ui, sans-serif;
+            background-color: var(--void);
+            color: var(--mist);
+            font-family: "Inter", system-ui, sans-serif;
+            overflow-x: hidden;
         }
 
-        /* warm ambient light */
-        .glow-warm {
-            background: radial-gradient(ellipse at center, rgba(196, 105, 61, 0.06) 0%, transparent 65%);
-        }
-        .glow-ochre {
-            background: radial-gradient(ellipse at center, rgba(204, 149, 68, 0.04) 0%, transparent 60%);
+        ::selection {
+            background: var(--volt);
+            color: var(--void);
         }
 
-        /* bohemian glass card */
-        .boho-card {
+        /* floating orbs — surreal ambient */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(239, 255, 0, 0.07), transparent 70%);
+            top: -10%; left: 15%;
+            animation: orb-drift-1 20s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(120, 80, 255, 0.04), transparent 70%);
+            bottom: 10%; right: -5%;
+            animation: orb-drift-2 25s ease-in-out infinite;
+        }
+        .orb-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(239, 255, 0, 0.04), transparent 70%);
+            top: 50%; left: -8%;
+            animation: orb-drift-3 18s ease-in-out infinite;
+        }
+
+        @keyframes orb-drift-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, 40px) scale(1.1); }
+            66% { transform: translate(-30px, 80px) scale(0.95); }
+        }
+        @keyframes orb-drift-2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-50px, -60px) scale(1.15); }
+        }
+        @keyframes orb-drift-3 {
+            0%, 100% { transform: translate(0, 0); }
+            40% { transform: translate(40px, -30px); }
+            80% { transform: translate(-20px, 50px); }
+        }
+
+        /* glass card */
+        .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px) saturate(120%);
-            -webkit-backdrop-filter: blur(20px) saturate(120%);
+            backdrop-filter: blur(24px) saturate(130%);
+            -webkit-backdrop-filter: blur(24px) saturate(130%);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 20px;
             box-shadow:
-                inset 0 1px 0 0 rgba(245, 239, 230, 0.04),
-                0 12px 40px -12px rgba(0, 0, 0, 0.6);
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+                inset 0 1px 0 0 rgba(239, 255, 0, 0.04),
+                0 20px 60px -15px rgba(0, 0, 0, 0.7);
+            transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s;
         }
-        .boho-card:hover {
-            border-color: rgba(212, 197, 169, 0.22);
+        .glass:hover {
+            border-color: rgba(239, 255, 0, 0.15);
+            transform: translateY(-2px);
             box-shadow:
-                inset 0 1px 0 0 rgba(245, 239, 230, 0.06),
-                0 16px 48px -12px rgba(0, 0, 0, 0.7);
+                inset 0 1px 0 0 rgba(239, 255, 0, 0.06),
+                0 24px 70px -15px rgba(0, 0, 0, 0.8);
         }
 
-        .btn-terracotta {
-            background: linear-gradient(135deg, var(--terracotta), var(--rust));
-            color: var(--parchment);
-            box-shadow: 0 4px 20px -4px rgba(196, 105, 61, 0.4);
-            transition: box-shadow 0.3s, transform 0.3s;
-        }
-        .btn-terracotta:hover {
-            box-shadow: 0 6px 28px -4px rgba(196, 105, 61, 0.55);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline-boho {
-            border: 1px solid rgba(212, 197, 169, 0.2);
-            background: rgba(212, 197, 169, 0.04);
-            color: var(--sand);
-            transition: border-color 0.3s, background 0.3s, transform 0.3s;
-        }
-        .btn-outline-boho:hover {
-            border-color: rgba(212, 197, 169, 0.4);
-            background: rgba(212, 197, 169, 0.08);
-            transform: translateY(-1px);
-        }
-
-        /* ornamental divider */
-        .ornament {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            opacity: 0.25;
-        }
-        .ornament::before, .ornament::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--sand), transparent);
-        }
-
-        /* bohemian text animations */
-        @keyframes drift-in {
-            from {
-                opacity: 0;
-                transform: translateY(28px) rotate(-1deg);
-                filter: blur(4px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) rotate(0deg);
-                filter: blur(0);
-            }
-        }
-
-        @keyframes letter-bloom {
+        /* hero entrance — bouncy cartoon pop */
+        @keyframes pop-in {
             0% {
                 opacity: 0;
-                transform: scale(0.7) translateY(12px);
-                filter: blur(3px);
+                transform: scale(0.3) rotate(-8deg);
+                filter: blur(10px);
             }
-            60% {
+            50% {
                 opacity: 1;
-                transform: scale(1.04) translateY(-2px);
+                transform: scale(1.08) rotate(2deg);
                 filter: blur(0);
+            }
+            70% {
+                transform: scale(0.96) rotate(-1deg);
+            }
+            85% {
+                transform: scale(1.02) rotate(0.5deg);
             }
             100% {
                 opacity: 1;
-                transform: scale(1) translateY(0);
+                transform: scale(1) rotate(0deg);
                 filter: blur(0);
             }
         }
 
-        @keyframes gentle-float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        @keyframes fade-up {
-            from {
+        @keyframes slide-up-bounce {
+            0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(60px);
             }
-            to {
+            60% {
+                opacity: 1;
+                transform: translateY(-8px);
+            }
+            80% {
+                transform: translateY(3px);
+            }
+            100% {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        @keyframes shimmer-line {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+        @keyframes wobble-in {
+            0% {
+                opacity: 0;
+                transform: translateX(-30px) rotate(-5deg);
+            }
+            40% {
+                opacity: 1;
+                transform: translateX(8px) rotate(2deg);
+            }
+            60% {
+                transform: translateX(-4px) rotate(-1deg);
+            }
+            80% {
+                transform: translateX(2px) rotate(0.5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) rotate(0);
+            }
         }
 
-        .drift-in {
-            animation: drift-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+        @keyframes float-dreamy {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-12px) rotate(1deg); }
+            75% { transform: translateY(6px) rotate(-0.5deg); }
         }
 
-        .hero-title .letter {
-            display: inline-block;
-            animation: letter-bloom 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        @keyframes gentle-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .gentle-float {
-            animation: gentle-float 6s ease-in-out infinite;
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(239, 255, 0, 0.15); }
+            50% { box-shadow: 0 0 40px rgba(239, 255, 0, 0.3), 0 0 80px rgba(239, 255, 0, 0.1); }
         }
 
-        .fade-up {
-            animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        .pop-in { animation: pop-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        .slide-up { animation: slide-up-bounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        .wobble-in { animation: wobble-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        .float-dreamy { animation: float-dreamy 8s ease-in-out infinite; }
+
+        .d1 { animation-delay: 0.1s; }
+        .d2 { animation-delay: 0.25s; }
+        .d3 { animation-delay: 0.4s; }
+        .d4 { animation-delay: 0.55s; }
+        .d5 { animation-delay: 0.7s; }
+        .d6 { animation-delay: 0.85s; }
+        .d7 { animation-delay: 1.0s; }
+        .d8 { animation-delay: 1.15s; }
+
+        /* app icon with dreamy float + glow */
+        .icon-float {
+            animation: float-dreamy 6s ease-in-out infinite, pulse-glow 4s ease-in-out infinite;
+            border-radius: 22%;
         }
 
-        .shimmer-text {
-            background: linear-gradient(
-                90deg,
-                var(--sand) 0%,
-                var(--ochre) 20%,
-                var(--terracotta) 40%,
-                var(--sand) 60%,
-                var(--ochre) 80%,
-                var(--sand) 100%
-            );
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer-line 8s linear infinite;
+        /* luxury mixed-weight heading */
+        .hero-line {
+            font-family: "Cormorant Garamond", Georgia, serif;
+            line-height: 1;
+        }
+        .hero-light {
+            font-weight: 300;
+            font-style: italic;
+            color: var(--mist-dim);
+        }
+        .hero-bold {
+            font-weight: 700;
+            color: var(--volt);
+        }
+        .hero-thin {
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            color: var(--mist-faint);
+            text-transform: uppercase;
+            font-style: normal;
         }
 
-        /* feature icon */
-        .boho-icon {
-            background: rgba(196, 105, 61, 0.08);
-            border: 1px solid rgba(196, 105, 61, 0.15);
-            border-radius: 12px;
-            transition: background 0.3s, border-color 0.3s;
+        /* rec dot */
+        .rec-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff2e3f;
+            box-shadow: 0 0 8px rgba(255, 46, 63, 0.8);
+            animation: pulse-rec 2s ease-in-out infinite;
         }
-        .boho-card:hover .boho-icon {
-            background: rgba(196, 105, 61, 0.14);
-            border-color: rgba(196, 105, 61, 0.25);
-        }
-
-        /* subtle botanical/mandala corner accent */
-        .corner-motif {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            opacity: 0.06;
-            pointer-events: none;
-        }
-        .corner-motif svg {
-            width: 100%;
-            height: 100%;
+        @keyframes pulse-rec {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
         }
 
-        ::selection {
-            background: var(--terracotta);
-            color: var(--parchment);
+        /* decorative star */
+        .star-spin {
+            animation: gentle-spin 12s linear infinite;
+            color: var(--volt);
+            opacity: 0.3;
         }
 
-        /* stagger delays for cards */
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
-        .stagger-5 { animation-delay: 0.5s; }
-        .stagger-6 { animation-delay: 0.65s; }
-        .stagger-7 { animation-delay: 0.8s; }
+        /* terminal block */
+        .terminal-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(239, 255, 0, 0.06);
+            border-radius: 14px;
+            transition: border-color 0.3s;
+        }
+        .terminal-block:hover {
+            border-color: rgba(239, 255, 0, 0.15);
+        }
+
+        /* feature icon circle */
+        .feat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(239, 255, 0, 0.06);
+            border: 1px solid rgba(239, 255, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--volt);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .glass:hover .feat-icon {
+            background: rgba(239, 255, 0, 0.12);
+            transform: scale(1.1) rotate(-5deg);
+        }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden antialiased relative">
+<body class="min-h-screen flex flex-col relative">
 
-    <div class="absolute top-[5%] left-[10%] w-[70vw] h-[60vh] glow-warm pointer-events-none z-0"></div>
-    <div class="absolute bottom-[10%] right-[5%] w-[50vw] h-[50vh] glow-ochre pointer-events-none z-0"></div>
+    <!-- ambient orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
     <!-- HEADER -->
-    <header class="w-full max-w-5xl mx-auto px-6 py-8 flex justify-between items-center relative z-10 drift-in">
+    <header class="w-full max-w-5xl mx-auto px-6 py-8 flex justify-between items-center relative z-10 slide-up d1">
         <div class="flex items-center space-x-3">
-            <div class="w-7 h-7 rounded-full bg-terracotta/20 border border-terracotta/30 flex items-center justify-center">
-                <span class="text-xs font-bold font-display text-terracotta italic">S</span>
-            </div>
-            <span class="text-[11px] font-display font-semibold tracking-[0.2em] text-sand/70 italic">
+            <img src="icon.png" alt="Screendial" class="w-8 h-8 rounded-lg" style="border-radius: 22%;">
+            <span class="text-[11px] font-luxury font-medium tracking-[0.15em] text-mist/50 italic">
                 Screendial
             </span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="rec-dot"></span>
+            <span class="text-[9px] font-medium tracking-[0.2em] uppercase text-mist/30">v0.1.0</span>
         </div>
     </header>
 
     <!-- HERO -->
-    <main class="w-full max-w-4xl mx-auto px-6 flex-grow flex flex-col justify-center items-center py-16 relative z-10">
+    <main class="w-full max-w-4xl mx-auto px-6 flex-grow flex flex-col justify-center items-center relative z-10">
 
-        <div class="text-center space-y-12 w-full">
+        <div class="text-center w-full space-y-14">
 
-            <!-- Kicker -->
-            <div class="drift-in stagger-1">
-                <p class="text-[10px] font-medium tracking-[0.5em] uppercase text-terracotta/70 mb-2">~ Native Desktop Copilot ~</p>
+            <!-- App icon -->
+            <div class="pop-in d2 flex justify-center">
+                <img src="icon.png" alt="Screendial" class="w-28 h-28 sm:w-36 sm:h-36 icon-float shadow-2xl">
             </div>
 
-            <!-- Title with letter-bloom animation -->
-            <h1 class="hero-title font-display font-black text-7xl sm:text-8xl lg:text-9xl tracking-tight leading-[0.9] drift-in stagger-2">
-                <span class="shimmer-text">Screendial</span>
-            </h1>
+            <!-- Luxury mixed-weight title -->
+            <div class="space-y-3 slide-up d3">
+                <h1 class="hero-line text-6xl sm:text-7xl lg:text-8xl">
+                    <span class="hero-light">Your</span>
+                    <span class="hero-bold"> Screen,</span>
+                </h1>
+                <h1 class="hero-line text-5xl sm:text-6xl lg:text-7xl">
+                    <span class="hero-bold">Decoded</span><span class="hero-light">.</span>
+                </h1>
+            </div>
 
             <!-- Subtitle -->
-            <p class="text-sm sm:text-base font-light text-sand/50 max-w-md mx-auto leading-relaxed font-body drift-in stagger-3" style="font-style: italic;">
-                An intelligent screen overlay that renders contextual guidance
-                directly on top of any application &mdash; voice, vision, and all.
+            <p class="text-sm sm:text-base font-light text-mist/40 max-w-lg mx-auto leading-relaxed slide-up d4">
+                An intelligent overlay that sees your screen, speaks to you,
+                and draws step-by-step guidance on top of any application.
             </p>
 
-            <!-- Ornament -->
-            <div class="ornament drift-in stagger-4 max-w-xs mx-auto">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2Z" fill="currentColor" class="text-sand"/>
+            <!-- Decorative star -->
+            <div class="flex justify-center slide-up d4">
+                <svg class="star-spin" width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2Z"/>
                 </svg>
             </div>
 
-            <!-- Download Section -->
-            <div class="max-w-xl mx-auto relative drift-in stagger-5">
-                <div class="p-7 boho-card text-left space-y-5">
+            <!-- Install Section -->
+            <div class="max-w-xl mx-auto wobble-in d5">
+                <div class="p-7 glass text-left space-y-5">
 
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5 text-terracotta">
+                        <div class="flex items-center space-x-2.5 text-volt">
                             <i data-lucide="terminal" class="w-4 h-4 shrink-0"></i>
-                            <span class="text-[10px] font-display font-bold uppercase tracking-widest italic">Install</span>
+                            <span class="text-[10px] font-luxury font-semibold uppercase tracking-[0.2em] italic">Install</span>
                         </div>
-                        <span class="text-[9px] font-semibold text-sand/40 uppercase tracking-wider bg-sand/5 px-2.5 py-1 rounded-full border border-sand/10">v0.1.0</span>
                     </div>
 
                     <!-- macOS -->
                     <div>
                         <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="apple" class="w-3.5 h-3.5 text-sand/50"></i>
-                            <span class="text-[10px] font-semibold text-sand/50 uppercase tracking-wider">macOS</span>
+                            <i data-lucide="apple" class="w-3.5 h-3.5 text-mist/40"></i>
+                            <span class="text-[10px] font-medium text-mist/40 uppercase tracking-wider">macOS</span>
                         </div>
-                        <div class="flex items-center justify-between bg-black/40 border border-sand/8 rounded-xl px-3.5 py-3 font-mono text-[11px] text-parchment/80 shadow-inner">
-                            <code id="mac-cmd" class="select-all">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
-                            <button id="copy-mac-btn" class="text-sand/30 hover:text-terracotta transition-colors duration-300 p-1 shrink-0" title="Copy">
+                        <div class="flex items-center justify-between terminal-block px-4 py-3 font-mono text-[11px] text-volt/80">
+                            <code id="mac-cmd" class="select-all break-all">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
+                            <button id="copy-mac-btn" class="text-mist/20 hover:text-volt transition-colors duration-300 p-1 shrink-0 ml-3" title="Copy">
                                 <i data-lucide="copy" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -323,81 +376,81 @@
                     <!-- Windows -->
                     <div>
                         <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="monitor" class="w-3.5 h-3.5 text-sand/50"></i>
-                            <span class="text-[10px] font-semibold text-sand/50 uppercase tracking-wider">Windows (PowerShell)</span>
+                            <i data-lucide="monitor" class="w-3.5 h-3.5 text-mist/40"></i>
+                            <span class="text-[10px] font-medium text-mist/40 uppercase tracking-wider">Windows (PowerShell)</span>
                         </div>
-                        <div class="flex items-center justify-between bg-black/40 border border-sand/8 rounded-xl px-3.5 py-3 font-mono text-[11px] text-parchment/80 shadow-inner">
-                            <code id="win-cmd" class="select-all">irm https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.ps1 | iex</code>
-                            <button id="copy-win-btn" class="text-sand/30 hover:text-terracotta transition-colors duration-300 p-1 shrink-0" title="Copy">
+                        <div class="flex items-center justify-between terminal-block px-4 py-3 font-mono text-[11px] text-volt/80">
+                            <code id="win-cmd" class="select-all break-all">irm https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.ps1 | iex</code>
+                            <button id="copy-win-btn" class="text-mist/20 hover:text-volt transition-colors duration-300 p-1 shrink-0 ml-3" title="Copy">
                                 <i data-lucide="copy" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between pt-3 border-t border-sand/8 text-[10px] text-sand/30">
-                        <div class="flex items-center gap-1.5 font-light">
-                            <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-sage"></i>
+                    <div class="flex items-center justify-between pt-3 border-t border-volt/5 text-[10px] text-mist/25">
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-volt/40"></i>
                             <span>Auto-installs &amp; launches</span>
                         </div>
-                        <div class="flex items-center gap-1 font-medium">
-                            <i data-lucide="lock" class="w-3 h-3 text-ochre/40"></i>
-                            <span class="text-ochre/40">Secure account sync</span>
+                        <div class="flex items-center gap-1">
+                            <i data-lucide="lock" class="w-3 h-3 text-volt/25"></i>
+                            <span>Secure sync</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Feature Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto text-left pt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto text-left pt-4">
 
-                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-4">
-                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
-                        <i data-lucide="eye" class="w-4 h-4 stroke-[1.8]"></i>
+                <div class="p-6 glass flex items-start space-x-4 slide-up d5">
+                    <div class="feat-icon shrink-0">
+                        <i data-lucide="eye" class="w-5 h-5 stroke-[1.5]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Transparent HUD</h3>
-                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
-                            Frameless, fullscreen overlay. Clicks pass through transparent regions
-                            while highlights anchor directly above on-screen elements.
+                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Transparent HUD</h3>
+                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
+                            Frameless fullscreen overlay. Clicks pass through transparent regions
+                            while highlights anchor above on-screen elements.
                         </p>
                     </div>
                 </div>
 
-                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-5">
-                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
-                        <i data-lucide="mic" class="w-4 h-4 stroke-[1.8]"></i>
+                <div class="p-6 glass flex items-start space-x-4 slide-up d6">
+                    <div class="feat-icon shrink-0">
+                        <i data-lucide="mic" class="w-5 h-5 stroke-[1.5]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Voice &amp; Visual Grounding</h3>
-                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
-                            ElevenLabs-powered voice synthesis and transcription. Coordinate-accurate
-                            brackets lock onto UI elements across all connected displays.
+                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Voice &amp; Vision</h3>
+                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
+                            ElevenLabs voice synthesis. Coordinate-accurate brackets
+                            lock onto UI elements across all connected displays.
                         </p>
                     </div>
                 </div>
 
-                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-6">
-                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
-                        <i data-lucide="user" class="w-4 h-4 stroke-[1.8]"></i>
+                <div class="p-6 glass flex items-start space-x-4 slide-up d7">
+                    <div class="feat-icon shrink-0">
+                        <i data-lucide="user" class="w-5 h-5 stroke-[1.5]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Cloud Accounts</h3>
-                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
-                            Sign in with email and password. Conversation history syncs
-                            securely across devices through Supabase.
+                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Cloud Accounts</h3>
+                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
+                            Email &amp; password sign-in. Conversation history
+                            syncs securely across devices.
                         </p>
                     </div>
                 </div>
 
-                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-7">
-                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
-                        <i data-lucide="layers" class="w-4 h-4 stroke-[1.8]"></i>
+                <div class="p-6 glass flex items-start space-x-4 slide-up d8">
+                    <div class="feat-icon shrink-0">
+                        <i data-lucide="layers" class="w-5 h-5 stroke-[1.5]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Executable Tool Widgets</h3>
-                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
-                            Interactive checklists, code overlays, and a floating command palette.
-                            Trigger via global hotkeys or wake-word activation.
+                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Tool Widgets</h3>
+                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
+                            Interactive checklists, code overlays, command palette.
+                            Global hotkeys and wake-word activation.
                         </p>
                     </div>
                 </div>
@@ -410,33 +463,12 @@
 
     <!-- FOOTER -->
     <footer class="w-full max-w-5xl mx-auto px-6 py-14 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div class="ornament w-full max-w-xs mx-auto sm:hidden mb-4">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2Z" fill="currentColor" class="text-sand"/>
-            </svg>
-        </div>
-        <span class="text-[9px] font-display italic text-sand/20 tracking-widest">Screendial v0.1.0</span>
-        <span class="text-[9px] font-display italic text-sand/20 tracking-widest">&copy; 2025 Screendial</span>
+        <span class="text-[9px] font-luxury italic text-mist/15 tracking-widest">Screendial v0.1.0</span>
+        <span class="text-[9px] font-luxury italic text-mist/15 tracking-widest">&copy; 2025 Screendial</span>
     </footer>
 
     <script>
         lucide.createIcons();
-
-        // letter-bloom animation for hero title
-        document.addEventListener('DOMContentLoaded', () => {
-            const title = document.querySelector('.hero-title .shimmer-text');
-            if (title) {
-                const text = title.textContent.trim();
-                title.innerHTML = '';
-                [...text].forEach((char, i) => {
-                    const span = document.createElement('span');
-                    span.className = 'letter';
-                    span.textContent = char;
-                    span.style.animationDelay = `${0.3 + i * 0.06}s`;
-                    title.appendChild(span);
-                });
-            }
-        });
 
         function setupCopy(buttonId, textId) {
             const btn = document.getElementById(buttonId);
