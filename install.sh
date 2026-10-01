@@ -4,7 +4,7 @@
 
 set -e
 
-REPO="idaraabasiudoh/screendial"
+REPO="idaraabasiudoh/screendial-web"
 API_URL="https://api.github.com/repos/$REPO/releases/latest"
 
 echo "=================================================="
