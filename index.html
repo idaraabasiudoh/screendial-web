@@ -763,13 +763,29 @@
       .section { padding: 48px 16px; }
       .section-heading { font-size: clamp(24px, 7vw, 36px); }
       .section-body { font-size: 15px; }
+      .install-cmd {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 12px;
+        gap: 6px;
+      }
+      .install-cmd-label { width: 100%; }
+      .install-cmd-text {
+        white-space: normal;
+        word-break: break-all;
+        font-size: 11px;
+        flex: 1;
+      }
+      .install-cmd-copy {
+        align-self: flex-end;
+      }
     }
 
     @media (max-width: 400px) {
       .hero-title { font-size: clamp(44px, 18vw, 72px); }
       .hero-kicker { font-size: 10px; margin-bottom: 14px; }
       .install-cmd-label { font-size: 9px; }
-      .install-cmd-text { font-size: 10px; }
+      .install-cmd-text { font-size: 9.5px; }
       .vf { inset: 44px 6px 100px; }
     }
 
