@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Screendial — Native Desktop Copilot</title>
 
-    <!-- Tailwind CSS & Lucide Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Google Fonts: Plus Jakarta Sans with a full range of weights (light to extra bold) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,6 +21,12 @@
                 extend: {
                     fontFamily: {
                         sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    colors: {
+                        'vhs-red': '#ff334b',
+                        'vhs-cyan': '#00f0ff',
+                        'vhs-violet': '#a855f7',
+                        'vhs-emerald': '#10b981',
                     }
                 }
             }
@@ -31,187 +35,196 @@
 
     <style>
         :root {
-            --glass-bg: rgba(18, 18, 18, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --glass-border-hover: rgba(255, 255, 255, 0.12);
-            --color-red: #ff334b;
-            --color-grey-dark: #121214;
-            --color-grey-muted: #5e5e64;
-            --color-grey-light: #a1a1a6;
+            --glass-bg: rgba(12, 12, 14, 0.7);
+            --glass-border: rgba(0, 240, 255, 0.08);
+            --glass-border-hover: rgba(0, 240, 255, 0.2);
+            --vhs-red: #ff334b;
+            --vhs-cyan: #00f0ff;
+            --vhs-violet: #a855f7;
         }
 
         body {
-            background-color: #000000;
-            color: #ffffff;
+            background-color: #05050a;
+            color: #e0e0e4;
             font-family: "Plus Jakarta Sans", sans-serif;
         }
 
-        /* Ambient subtle greyish backlights to create glass depth without colored hues */
-        .ambient-backlight {
-            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0) 65%);
+        .vhs-glow-cyan {
+            background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.04) 0%, transparent 70%);
+        }
+        .vhs-glow-red {
+            background: radial-gradient(ellipse at center, rgba(255, 51, 75, 0.03) 0%, transparent 70%);
         }
 
-        /* Clean Glass Card styling - strictly greys and fine borders */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(100%);
-            -webkit-backdrop-filter: blur(30px) saturate(100%);
+            backdrop-filter: blur(24px) saturate(110%);
+            -webkit-backdrop-filter: blur(24px) saturate(110%);
             border: 1px solid var(--glass-border);
             box-shadow:
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
-                0 10px 30px -10px rgba(0, 0, 0, 0.8);
+                inset 0 1px 0 0 rgba(0, 240, 255, 0.04),
+                0 10px 40px -12px rgba(0, 0, 0, 0.9);
+        }
+        .glass-card:hover {
+            border-color: var(--glass-border-hover);
         }
 
-        /* macOS Action Button - Sharp Crimson Red */
-        .btn-action-red {
-            background-color: var(--color-red);
-            box-shadow: 0 4px 20px -4px rgba(255, 51, 75, 0.4);
+        .scanline-overlay {
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.03) 2px,
+                rgba(0, 0, 0, 0.03) 4px
+            );
         }
 
-        /* Windows Disabled Button - Fine outlines only */
-        .btn-action-outline {
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--color-grey-muted);
-            cursor: not-allowed;
+        .vhs-tag {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--vhs-cyan);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+
+        .feature-icon-box {
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid rgba(0, 240, 255, 0.1);
         }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden antialiased relative">
 
-    <!-- Subtle, deep specular radial backlights to define glass depth -->
-    <div class="absolute top-[10%] left-[20%] w-[60vw] h-[60vh] ambient-backlight pointer-events-none z-0"></div>
-    <div class="absolute bottom-[15%] right-[10%] w-[50vw] h-[50vh] ambient-backlight pointer-events-none z-0"></div>
+    <div class="scanline-overlay"></div>
 
-    <!-- 1. HEADER -->
+    <div class="absolute top-[5%] left-[15%] w-[65vw] h-[55vh] vhs-glow-cyan pointer-events-none z-0"></div>
+    <div class="absolute bottom-[10%] right-[5%] w-[50vw] h-[50vh] vhs-glow-red pointer-events-none z-0"></div>
+
+    <!-- HEADER -->
     <header class="w-full max-w-5xl mx-auto px-6 py-8 flex justify-between items-center relative z-10">
         <div class="flex items-center space-x-3">
-            <!-- Minimal high-contrast logo symbol -->
-            <div class="w-6 h-6 rounded bg-white flex items-center justify-center">
-                <span class="text-xs font-black text-black tracking-tighter">S</span>
+            <div class="w-6 h-6 rounded bg-vhs-cyan/20 border border-vhs-cyan/30 flex items-center justify-center">
+                <span class="text-xs font-black text-vhs-cyan tracking-tighter">S</span>
             </div>
-            <span class="text-[10px] font-extrabold tracking-[0.35em] uppercase text-white">
+            <span class="text-[10px] font-extrabold tracking-[0.35em] uppercase text-white/80">
                 Screendial
             </span>
         </div>
-
+        <div class="flex items-center gap-4">
+            <span class="vhs-tag hidden sm:inline-block">v0.1.0</span>
+        </div>
     </header>
 
-    <!-- 2. HERO & MAIN CONTENT -->
+    <!-- HERO -->
     <main class="w-full max-w-4xl mx-auto px-6 flex-grow flex flex-col justify-center items-center py-12 relative z-10">
 
         <div class="text-center space-y-10 w-full">
 
-            <!-- Huge Bolder Headline & Finer Subtitle -->
-            <div class="space-y-3">
+            <div class="space-y-4">
+                <p class="text-[10px] font-bold tracking-[0.4em] uppercase text-vhs-cyan/70">Native Desktop Copilot</p>
                 <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-none">
-                    Screendial
+                    Screen<span class="text-vhs-cyan">dial</span>
                 </h1>
-                <p class="text-xs sm:text-sm font-light tracking-[0.28em] text-[#a1a1a6] uppercase">
-                    The Native Desktop Copilot
-                </p>
-            </div>
-
-            <!-- Finer Description -->
-            <div class="max-w-xl mx-auto">
-                <p class="text-xs sm:text-sm text-[#a1a1a6] font-light leading-relaxed tracking-wide">
-                    An intelligent screen overlay designed to guide you through complex workflows step-by-step.
-                    Screendial captures your screens and renders contextual instructions
+                <p class="text-sm sm:text-base font-light text-white/50 max-w-lg mx-auto leading-relaxed">
+                    An intelligent screen overlay that guides you through complex workflows step-by-step,
                     directly on top of any application.
                 </p>
             </div>
 
-            <!-- Unified Installer Terminal Block -->
-            <div class="max-w-xl mx-auto p-5 rounded glass-card text-left pt-6 border border-white/5 space-y-4">
-                
+            <!-- Install Block -->
+            <div class="max-w-xl mx-auto p-5 rounded-lg glass-card text-left space-y-4">
+
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2.5 text-[#ff334b]">
+                    <div class="flex items-center space-x-2.5 text-vhs-cyan">
                         <i data-lucide="terminal" class="w-4 h-4 shrink-0"></i>
-                        <span class="text-[10px] font-extrabold uppercase tracking-wider">Automated macOS Install</span>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider">Quick Install</span>
                     </div>
-                    <span class="text-[9px] font-bold text-[#5e5e64] uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded border border-white/5">macOS 12+</span>
+                    <span class="vhs-tag">macOS 12+</span>
                 </div>
 
-                <p class="text-xs text-[#a1a1a6] leading-relaxed font-light">
-                    Install Screendial directly to your Applications folder and automatically bypass all macOS Gatekeeper "damaged app" warnings in a single step. Copy and paste this command into your <b>Terminal</b>:
+                <p class="text-xs text-white/40 leading-relaxed font-light">
+                    Install Screendial to your Applications folder with automatic Gatekeeper bypass.
+                    Paste this into <b class="text-white/60">Terminal</b>:
                 </p>
 
-                <div class="flex items-center justify-between bg-black/60 border border-white/5 rounded-lg px-3.5 py-3 font-mono text-[11px] text-white shadow-inner">
-                    <code id="installer-cmd" class="select-all text-white/90">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
-                    <button id="copy-installer-btn" class="text-[#a1a1a6] hover:text-white transition-colors p-1 shrink-0" title="Copy install command">
+                <div class="flex items-center justify-between bg-black/70 border border-vhs-cyan/10 rounded-lg px-3.5 py-3 font-mono text-[11px] text-white shadow-inner">
+                    <code id="installer-cmd" class="select-all text-vhs-cyan/90">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
+                    <button id="copy-installer-btn" class="text-white/30 hover:text-vhs-cyan transition-colors p-1 shrink-0" title="Copy install command">
                         <i data-lucide="copy" class="w-4 h-4"></i>
                     </button>
                 </div>
 
-                <div class="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-[#5e5e64]">
+                <div class="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-white/30">
                     <div class="flex items-center gap-1.5 font-light">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-emerald-500"></i>
-                        <span class="text-[#a1a1a6]">Clears Gatekeeper block automatically</span>
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-vhs-emerald"></i>
+                        <span class="text-white/40">Clears Gatekeeper block automatically</span>
                     </div>
-                    <div class="font-bold flex items-center gap-1">
+                    <div class="font-bold flex items-center gap-1 text-white/25">
                         <i data-lucide="monitor" class="w-3.5 h-3.5 opacity-50"></i>
                         <span>Windows <span class="opacity-50 font-normal">(Soon)</span></span>
                     </div>
                 </div>
             </div>
 
-            <!-- Sleek Feature Cards Grid (Strict Grey, Black, White, Red dots) -->
+            <!-- Feature Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto text-left pt-12">
 
-                <!-- Feature 1 -->
-                <div class="p-6 rounded glass-card flex items-start space-x-4">
-                    <div class="p-2 rounded bg-white/5 text-white shrink-0 mt-0.5 border border-white/5">
+                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
+                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
                         <i data-lucide="eye" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
                         <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Transparent HUD</h3>
-                        <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Frameless, transparent fullscreen HUD overlay. Passes mouse clicks directly through
-                            transparent areas while anchoring highlights directly above on-screen elements.
+                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
+                            Frameless, fullscreen overlay. Mouse clicks pass through transparent areas
+                            while highlights anchor directly above on-screen elements.
                         </p>
                     </div>
                 </div>
 
-                <!-- Feature 2 -->
-                <div class="p-6 rounded glass-card flex items-start space-x-4">
-                    <div class="p-2 rounded bg-white/5 text-white shrink-0 mt-0.5 border border-white/5">
+                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
+                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
                         <i data-lucide="mic" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Voice & Visual Grounding
-                        </h3>
-                        <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Synthesizes clear spoken guidance and draws coordinate-accurate glowing boxes around UI elements across all your connected displays instantly.
+                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Voice & Visual Grounding</h3>
+                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
+                            Spoken guidance with coordinate-accurate glowing highlights across all your
+                            connected displays, powered by ElevenLabs and Gemini.
                         </p>
                     </div>
                 </div>
 
-                <!-- Feature 3 -->
-                <div class="p-6 rounded glass-card flex items-start space-x-4">
-                    <div class="p-2 rounded bg-white/5 text-white shrink-0 mt-0.5 border border-white/5">
+                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
+                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
                         <i data-lucide="cpu" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
                         <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Contextual Skills</h3>
-                        <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Active application tracking. Dynamically captures screen context and active foreground
-                            processes (DaVinci Resolve, Safari, VS Code) to surface custom actions.
+                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
+                            Active application tracking with dynamic skills for DaVinci Resolve,
+                            Safari, VS Code, and macOS system workflows.
                         </p>
                     </div>
                 </div>
 
-                <!-- Feature 4 -->
-                <div class="p-6 rounded glass-card flex items-start space-x-4">
-                    <div class="p-2 rounded bg-white/5 text-white shrink-0 mt-0.5 border border-white/5">
+                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
+                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
                         <i data-lucide="layers" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Executable Tool Widgets
-                        </h3>
-                        <p class="text-[11px] text-[#a1a1a6] mt-1.5 leading-relaxed font-light">
-                            Interactive, frame-perfect checklist overlays, control gauges, and command palettes. Clear
-                            overlays or trigger recordings instantly using global shortcut hotkeys.
+                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Tool Widgets</h3>
+                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
+                            Interactive checklist overlays, code panels, and a floating command palette.
+                            Trigger via global hotkeys or wake-word activation.
                         </p>
                     </div>
                 </div>
@@ -222,22 +235,20 @@
 
     </main>
 
-    <!-- 3. FOOTER -->
+    <!-- FOOTER -->
     <footer
-        class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] text-[#5e5e64] font-semibold tracking-[0.25em] uppercase">
+        class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] text-white/20 font-semibold tracking-[0.25em] uppercase">
         <div>
             <span>Screendial v0.1.0</span>
         </div>
         <div>
-            <span>© 2025 Screendial Team</span>
+            <span>&copy; 2025 Screendial</span>
         </div>
     </footer>
 
-    <!-- Initialize Lucide Icons -->
     <script>
         lucide.createIcons();
 
-        // Copy Handler Helper
         function setupCopy(buttonId, textId) {
             const btn = document.getElementById(buttonId);
             if (btn) {
