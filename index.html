@@ -11,22 +11,26 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        display: ['"Playfair Display"', 'Georgia', 'serif'],
+                        body: ['"DM Sans"', 'system-ui', 'sans-serif'],
                     },
                     colors: {
-                        'vhs-red': '#ff334b',
-                        'vhs-cyan': '#00f0ff',
-                        'vhs-violet': '#a855f7',
-                        'vhs-emerald': '#10b981',
+                        clay: '#1a1410',
+                        parchment: '#f5efe6',
+                        sand: '#d4c5a9',
+                        terracotta: '#c4693d',
+                        rust: '#a0522d',
+                        sage: '#7a8b6f',
+                        olive: '#5c6b4e',
+                        ochre: '#cc9544',
+                        ink: '#2c2416',
                     }
                 }
             }
@@ -35,195 +39,367 @@
 
     <style>
         :root {
-            --glass-bg: rgba(12, 12, 14, 0.7);
-            --glass-border: rgba(0, 240, 255, 0.08);
-            --glass-border-hover: rgba(0, 240, 255, 0.2);
-            --vhs-red: #ff334b;
-            --vhs-cyan: #00f0ff;
-            --vhs-violet: #a855f7;
+            --clay: #1a1410;
+            --parchment: #f5efe6;
+            --sand: #d4c5a9;
+            --terracotta: #c4693d;
+            --rust: #a0522d;
+            --sage: #7a8b6f;
+            --ochre: #cc9544;
+            --ink: #2c2416;
+            --glass-bg: rgba(245, 239, 230, 0.06);
+            --glass-border: rgba(212, 197, 169, 0.12);
         }
 
         body {
-            background-color: #05050a;
-            color: #e0e0e4;
-            font-family: "Plus Jakarta Sans", sans-serif;
+            background-color: var(--clay);
+            color: var(--parchment);
+            font-family: "DM Sans", system-ui, sans-serif;
         }
 
-        .vhs-glow-cyan {
-            background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.04) 0%, transparent 70%);
+        /* warm ambient light */
+        .glow-warm {
+            background: radial-gradient(ellipse at center, rgba(196, 105, 61, 0.06) 0%, transparent 65%);
         }
-        .vhs-glow-red {
-            background: radial-gradient(ellipse at center, rgba(255, 51, 75, 0.03) 0%, transparent 70%);
+        .glow-ochre {
+            background: radial-gradient(ellipse at center, rgba(204, 149, 68, 0.04) 0%, transparent 60%);
         }
 
-        .glass-card {
+        /* bohemian glass card */
+        .boho-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(24px) saturate(110%);
-            -webkit-backdrop-filter: blur(24px) saturate(110%);
+            backdrop-filter: blur(20px) saturate(120%);
+            -webkit-backdrop-filter: blur(20px) saturate(120%);
             border: 1px solid var(--glass-border);
+            border-radius: 16px;
             box-shadow:
-                inset 0 1px 0 0 rgba(0, 240, 255, 0.04),
-                0 10px 40px -12px rgba(0, 0, 0, 0.9);
+                inset 0 1px 0 0 rgba(245, 239, 230, 0.04),
+                0 12px 40px -12px rgba(0, 0, 0, 0.6);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
-        .glass-card:hover {
-            border-color: var(--glass-border-hover);
+        .boho-card:hover {
+            border-color: rgba(212, 197, 169, 0.22);
+            box-shadow:
+                inset 0 1px 0 0 rgba(245, 239, 230, 0.06),
+                0 16px 48px -12px rgba(0, 0, 0, 0.7);
         }
 
-        .scanline-overlay {
-            pointer-events: none;
-            position: fixed;
-            inset: 0;
-            z-index: 50;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.03) 2px,
-                rgba(0, 0, 0, 0.03) 4px
+        .btn-terracotta {
+            background: linear-gradient(135deg, var(--terracotta), var(--rust));
+            color: var(--parchment);
+            box-shadow: 0 4px 20px -4px rgba(196, 105, 61, 0.4);
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .btn-terracotta:hover {
+            box-shadow: 0 6px 28px -4px rgba(196, 105, 61, 0.55);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-boho {
+            border: 1px solid rgba(212, 197, 169, 0.2);
+            background: rgba(212, 197, 169, 0.04);
+            color: var(--sand);
+            transition: border-color 0.3s, background 0.3s, transform 0.3s;
+        }
+        .btn-outline-boho:hover {
+            border-color: rgba(212, 197, 169, 0.4);
+            background: rgba(212, 197, 169, 0.08);
+            transform: translateY(-1px);
+        }
+
+        /* ornamental divider */
+        .ornament {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0.25;
+        }
+        .ornament::before, .ornament::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--sand), transparent);
+        }
+
+        /* bohemian text animations */
+        @keyframes drift-in {
+            from {
+                opacity: 0;
+                transform: translateY(28px) rotate(-1deg);
+                filter: blur(4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes letter-bloom {
+            0% {
+                opacity: 0;
+                transform: scale(0.7) translateY(12px);
+                filter: blur(3px);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.04) translateY(-2px);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes gentle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer-line {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .drift-in {
+            animation: drift-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .hero-title .letter {
+            display: inline-block;
+            animation: letter-bloom 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .gentle-float {
+            animation: gentle-float 6s ease-in-out infinite;
+        }
+
+        .fade-up {
+            animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .shimmer-text {
+            background: linear-gradient(
+                90deg,
+                var(--sand) 0%,
+                var(--ochre) 20%,
+                var(--terracotta) 40%,
+                var(--sand) 60%,
+                var(--ochre) 80%,
+                var(--sand) 100%
             );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-line 8s linear infinite;
         }
 
-        .vhs-tag {
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--vhs-cyan);
-            border: 1px solid rgba(0, 240, 255, 0.15);
-            padding: 2px 8px;
-            border-radius: 3px;
+        /* feature icon */
+        .boho-icon {
+            background: rgba(196, 105, 61, 0.08);
+            border: 1px solid rgba(196, 105, 61, 0.15);
+            border-radius: 12px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .boho-card:hover .boho-icon {
+            background: rgba(196, 105, 61, 0.14);
+            border-color: rgba(196, 105, 61, 0.25);
         }
 
-        .feature-icon-box {
-            background: rgba(0, 240, 255, 0.06);
-            border: 1px solid rgba(0, 240, 255, 0.1);
+        /* subtle botanical/mandala corner accent */
+        .corner-motif {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0.06;
+            pointer-events: none;
         }
+        .corner-motif svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        ::selection {
+            background: var(--terracotta);
+            color: var(--parchment);
+        }
+
+        /* stagger delays for cards */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.65s; }
+        .stagger-7 { animation-delay: 0.8s; }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col justify-between overflow-x-hidden antialiased relative">
 
-    <div class="scanline-overlay"></div>
-
-    <div class="absolute top-[5%] left-[15%] w-[65vw] h-[55vh] vhs-glow-cyan pointer-events-none z-0"></div>
-    <div class="absolute bottom-[10%] right-[5%] w-[50vw] h-[50vh] vhs-glow-red pointer-events-none z-0"></div>
+    <div class="absolute top-[5%] left-[10%] w-[70vw] h-[60vh] glow-warm pointer-events-none z-0"></div>
+    <div class="absolute bottom-[10%] right-[5%] w-[50vw] h-[50vh] glow-ochre pointer-events-none z-0"></div>
 
     <!-- HEADER -->
-    <header class="w-full max-w-5xl mx-auto px-6 py-8 flex justify-between items-center relative z-10">
+    <header class="w-full max-w-5xl mx-auto px-6 py-8 flex justify-between items-center relative z-10 drift-in">
         <div class="flex items-center space-x-3">
-            <div class="w-6 h-6 rounded bg-vhs-cyan/20 border border-vhs-cyan/30 flex items-center justify-center">
-                <span class="text-xs font-black text-vhs-cyan tracking-tighter">S</span>
+            <div class="w-7 h-7 rounded-full bg-terracotta/20 border border-terracotta/30 flex items-center justify-center">
+                <span class="text-xs font-bold font-display text-terracotta italic">S</span>
             </div>
-            <span class="text-[10px] font-extrabold tracking-[0.35em] uppercase text-white/80">
+            <span class="text-[11px] font-display font-semibold tracking-[0.2em] text-sand/70 italic">
                 Screendial
             </span>
         </div>
         <div class="flex items-center gap-4">
-            <span class="vhs-tag hidden sm:inline-block">v0.1.0</span>
+            <a href="https://github.com/idaraabasiudoh/screendial" target="_blank"
+                class="text-[10px] font-medium tracking-[0.15em] uppercase text-sand/40 hover:text-terracotta transition-colors duration-300">
+                GitHub
+            </a>
         </div>
     </header>
 
     <!-- HERO -->
-    <main class="w-full max-w-4xl mx-auto px-6 flex-grow flex flex-col justify-center items-center py-12 relative z-10">
+    <main class="w-full max-w-4xl mx-auto px-6 flex-grow flex flex-col justify-center items-center py-16 relative z-10">
 
-        <div class="text-center space-y-10 w-full">
+        <div class="text-center space-y-12 w-full">
 
-            <div class="space-y-4">
-                <p class="text-[10px] font-bold tracking-[0.4em] uppercase text-vhs-cyan/70">Native Desktop Copilot</p>
-                <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-none">
-                    Screen<span class="text-vhs-cyan">dial</span>
-                </h1>
-                <p class="text-sm sm:text-base font-light text-white/50 max-w-lg mx-auto leading-relaxed">
-                    An intelligent screen overlay that guides you through complex workflows step-by-step,
-                    directly on top of any application.
-                </p>
+            <!-- Kicker -->
+            <div class="drift-in stagger-1">
+                <p class="text-[10px] font-medium tracking-[0.5em] uppercase text-terracotta/70 mb-2">~ Native Desktop Copilot ~</p>
             </div>
 
-            <!-- Install Block -->
-            <div class="max-w-xl mx-auto p-5 rounded-lg glass-card text-left space-y-4">
+            <!-- Title with letter-bloom animation -->
+            <h1 class="hero-title font-display font-black text-7xl sm:text-8xl lg:text-9xl tracking-tight leading-[0.9] drift-in stagger-2">
+                <span class="shimmer-text">Screendial</span>
+            </h1>
 
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2.5 text-vhs-cyan">
-                        <i data-lucide="terminal" class="w-4 h-4 shrink-0"></i>
-                        <span class="text-[10px] font-extrabold uppercase tracking-wider">Quick Install</span>
+            <!-- Subtitle -->
+            <p class="text-sm sm:text-base font-light text-sand/50 max-w-md mx-auto leading-relaxed font-body drift-in stagger-3" style="font-style: italic;">
+                An intelligent screen overlay that renders contextual guidance
+                directly on top of any application &mdash; voice, vision, and all.
+            </p>
+
+            <!-- Ornament -->
+            <div class="ornament drift-in stagger-4 max-w-xs mx-auto">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2Z" fill="currentColor" class="text-sand"/>
+                </svg>
+            </div>
+
+            <!-- Download Section -->
+            <div class="max-w-xl mx-auto relative drift-in stagger-5">
+                <div class="p-7 boho-card text-left space-y-5">
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2.5 text-terracotta">
+                            <i data-lucide="download" class="w-4 h-4 shrink-0"></i>
+                            <span class="text-[10px] font-display font-bold uppercase tracking-widest italic">Download</span>
+                        </div>
+                        <span class="text-[9px] font-semibold text-sand/40 uppercase tracking-wider bg-sand/5 px-2.5 py-1 rounded-full border border-sand/10">v0.1.0</span>
                     </div>
-                    <span class="vhs-tag">macOS 12+</span>
-                </div>
 
-                <p class="text-xs text-white/40 leading-relaxed font-light">
-                    Install Screendial to your Applications folder with automatic Gatekeeper bypass.
-                    Paste this into <b class="text-white/60">Terminal</b>:
-                </p>
-
-                <div class="flex items-center justify-between bg-black/70 border border-vhs-cyan/10 rounded-lg px-3.5 py-3 font-mono text-[11px] text-white shadow-inner">
-                    <code id="installer-cmd" class="select-all text-vhs-cyan/90">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
-                    <button id="copy-installer-btn" class="text-white/30 hover:text-vhs-cyan transition-colors p-1 shrink-0" title="Copy install command">
-                        <i data-lucide="copy" class="w-4 h-4"></i>
-                    </button>
-                </div>
-
-                <div class="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-white/30">
-                    <div class="flex items-center gap-1.5 font-light">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-vhs-emerald"></i>
-                        <span class="text-white/40">Clears Gatekeeper block automatically</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <a href="https://github.com/idaraabasiudoh/screendial/releases/latest/download/Screendial.dmg"
+                            class="btn-terracotta rounded-full px-5 py-3.5 text-xs font-semibold tracking-wider uppercase text-center flex items-center justify-center gap-2">
+                            <i data-lucide="apple" class="w-4 h-4"></i>
+                            macOS (.dmg)
+                        </a>
+                        <a href="https://github.com/idaraabasiudoh/screendial/releases/latest/download/Screendial.exe"
+                            class="btn-outline-boho rounded-full px-5 py-3.5 text-xs font-semibold tracking-wider uppercase text-center flex items-center justify-center gap-2">
+                            <i data-lucide="monitor" class="w-4 h-4"></i>
+                            Windows (.exe)
+                        </a>
                     </div>
-                    <div class="font-bold flex items-center gap-1 text-white/25">
-                        <i data-lucide="monitor" class="w-3.5 h-3.5 opacity-50"></i>
-                        <span>Windows <span class="opacity-50 font-normal">(Soon)</span></span>
+
+                    <div>
+                        <p class="text-[10px] text-sand/35 font-light leading-relaxed italic">
+                            Or install on macOS via Terminal:
+                        </p>
+                        <div class="flex items-center justify-between bg-black/40 border border-sand/8 rounded-xl px-3.5 py-3 font-mono text-[11px] text-parchment/80 mt-2 shadow-inner">
+                            <code id="installer-cmd" class="select-all">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
+                            <button id="copy-installer-btn" class="text-sand/30 hover:text-terracotta transition-colors duration-300 p-1 shrink-0" title="Copy">
+                                <i data-lucide="copy" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-3 border-t border-sand/8 text-[10px] text-sand/30">
+                        <div class="flex items-center gap-1.5 font-light">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-sage"></i>
+                            <span>Gatekeeper bypass included</span>
+                        </div>
+                        <div class="flex items-center gap-1 font-medium">
+                            <i data-lucide="lock" class="w-3 h-3 text-ochre/40"></i>
+                            <span class="text-ochre/40">Secure account sync</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Feature Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto text-left pt-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto text-left pt-8">
 
-                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
-                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
+                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-4">
+                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
                         <i data-lucide="eye" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Transparent HUD</h3>
-                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
-                            Frameless, fullscreen overlay. Mouse clicks pass through transparent areas
+                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Transparent HUD</h3>
+                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
+                            Frameless, fullscreen overlay. Clicks pass through transparent regions
                             while highlights anchor directly above on-screen elements.
                         </p>
                     </div>
                 </div>
 
-                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
-                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
+                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-5">
+                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
                         <i data-lucide="mic" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Voice & Visual Grounding</h3>
-                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
-                            Spoken guidance with coordinate-accurate glowing highlights across all your
-                            connected displays, powered by ElevenLabs and Gemini.
+                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Voice &amp; Visual Grounding</h3>
+                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
+                            ElevenLabs-powered voice synthesis and transcription. Coordinate-accurate
+                            brackets lock onto UI elements across all connected displays.
                         </p>
                     </div>
                 </div>
 
-                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
-                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
-                        <i data-lucide="cpu" class="w-4 h-4 stroke-[1.8]"></i>
+                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-6">
+                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
+                        <i data-lucide="user" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Contextual Skills</h3>
-                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
-                            Active application tracking with dynamic skills for DaVinci Resolve,
-                            Safari, VS Code, and macOS system workflows.
+                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Cloud Accounts</h3>
+                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
+                            Sign in with email and password. Conversation history syncs
+                            securely across devices through Supabase.
                         </p>
                     </div>
                 </div>
 
-                <div class="p-6 rounded-lg glass-card flex items-start space-x-4 group">
-                    <div class="p-2 rounded feature-icon-box text-vhs-cyan shrink-0 mt-0.5">
+                <div class="p-6 boho-card flex items-start space-x-4 fade-up stagger-7">
+                    <div class="p-2.5 boho-icon text-terracotta shrink-0 mt-0.5">
                         <i data-lucide="layers" class="w-4 h-4 stroke-[1.8]"></i>
                     </div>
                     <div>
-                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider">Tool Widgets</h3>
-                        <p class="text-[11px] text-white/40 mt-1.5 leading-relaxed font-light">
-                            Interactive checklist overlays, code panels, and a floating command palette.
+                        <h3 class="text-xs font-display font-bold text-parchment tracking-wide italic">Executable Tool Widgets</h3>
+                        <p class="text-[11px] text-sand/40 mt-1.5 leading-relaxed font-light">
+                            Interactive checklists, code overlays, and a floating command palette.
                             Trigger via global hotkeys or wake-word activation.
                         </p>
                     </div>
@@ -236,18 +412,34 @@
     </main>
 
     <!-- FOOTER -->
-    <footer
-        class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px] text-white/20 font-semibold tracking-[0.25em] uppercase">
-        <div>
-            <span>Screendial v0.1.0</span>
+    <footer class="w-full max-w-5xl mx-auto px-6 py-14 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="ornament w-full max-w-xs mx-auto sm:hidden mb-4">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2Z" fill="currentColor" class="text-sand"/>
+            </svg>
         </div>
-        <div>
-            <span>&copy; 2025 Screendial</span>
-        </div>
+        <span class="text-[9px] font-display italic text-sand/20 tracking-widest">Screendial v0.1.0</span>
+        <span class="text-[9px] font-display italic text-sand/20 tracking-widest">&copy; 2025 Screendial</span>
     </footer>
 
     <script>
         lucide.createIcons();
+
+        // letter-bloom animation for hero title
+        document.addEventListener('DOMContentLoaded', () => {
+            const title = document.querySelector('.hero-title .shimmer-text');
+            if (title) {
+                const text = title.textContent.trim();
+                title.innerHTML = '';
+                [...text].forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'letter';
+                    span.textContent = char;
+                    span.style.animationDelay = `${0.3 + i * 0.06}s`;
+                    title.appendChild(span);
+                });
+            }
+        });
 
         function setupCopy(buttonId, textId) {
             const btn = document.getElementById(buttonId);
