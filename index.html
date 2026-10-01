@@ -264,12 +264,6 @@
                 Screendial
             </span>
         </div>
-        <div class="flex items-center gap-4">
-            <a href="https://github.com/idaraabasiudoh/screendial" target="_blank"
-                class="text-[10px] font-medium tracking-[0.15em] uppercase text-sand/40 hover:text-terracotta transition-colors duration-300">
-                GitHub
-            </a>
-        </div>
     </header>
 
     <!-- HERO -->
@@ -306,32 +300,35 @@
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-2.5 text-terracotta">
-                            <i data-lucide="download" class="w-4 h-4 shrink-0"></i>
-                            <span class="text-[10px] font-display font-bold uppercase tracking-widest italic">Download</span>
+                            <i data-lucide="terminal" class="w-4 h-4 shrink-0"></i>
+                            <span class="text-[10px] font-display font-bold uppercase tracking-widest italic">Install</span>
                         </div>
                         <span class="text-[9px] font-semibold text-sand/40 uppercase tracking-wider bg-sand/5 px-2.5 py-1 rounded-full border border-sand/10">v0.1.0</span>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <a href="https://github.com/idaraabasiudoh/screendial-web/releases/latest/download/Screendial.dmg"
-                            class="btn-terracotta rounded-full px-5 py-3.5 text-xs font-semibold tracking-wider uppercase text-center flex items-center justify-center gap-2">
-                            <i data-lucide="apple" class="w-4 h-4"></i>
-                            macOS (.dmg)
-                        </a>
-                        <a href="https://github.com/idaraabasiudoh/screendial-web/releases/latest/download/Screendial.exe"
-                            class="btn-outline-boho rounded-full px-5 py-3.5 text-xs font-semibold tracking-wider uppercase text-center flex items-center justify-center gap-2">
-                            <i data-lucide="monitor" class="w-4 h-4"></i>
-                            Windows (.exe)
-                        </a>
+                    <!-- macOS -->
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="apple" class="w-3.5 h-3.5 text-sand/50"></i>
+                            <span class="text-[10px] font-semibold text-sand/50 uppercase tracking-wider">macOS</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-black/40 border border-sand/8 rounded-xl px-3.5 py-3 font-mono text-[11px] text-parchment/80 shadow-inner">
+                            <code id="mac-cmd" class="select-all">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
+                            <button id="copy-mac-btn" class="text-sand/30 hover:text-terracotta transition-colors duration-300 p-1 shrink-0" title="Copy">
+                                <i data-lucide="copy" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </div>
 
+                    <!-- Windows -->
                     <div>
-                        <p class="text-[10px] text-sand/35 font-light leading-relaxed italic">
-                            Or install on macOS via Terminal:
-                        </p>
-                        <div class="flex items-center justify-between bg-black/40 border border-sand/8 rounded-xl px-3.5 py-3 font-mono text-[11px] text-parchment/80 mt-2 shadow-inner">
-                            <code id="installer-cmd" class="select-all">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
-                            <button id="copy-installer-btn" class="text-sand/30 hover:text-terracotta transition-colors duration-300 p-1 shrink-0" title="Copy">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="monitor" class="w-3.5 h-3.5 text-sand/50"></i>
+                            <span class="text-[10px] font-semibold text-sand/50 uppercase tracking-wider">Windows (PowerShell)</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-black/40 border border-sand/8 rounded-xl px-3.5 py-3 font-mono text-[11px] text-parchment/80 shadow-inner">
+                            <code id="win-cmd" class="select-all">irm https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.ps1 | iex</code>
+                            <button id="copy-win-btn" class="text-sand/30 hover:text-terracotta transition-colors duration-300 p-1 shrink-0" title="Copy">
                                 <i data-lucide="copy" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -340,7 +337,7 @@
                     <div class="flex items-center justify-between pt-3 border-t border-sand/8 text-[10px] text-sand/30">
                         <div class="flex items-center gap-1.5 font-light">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-sage"></i>
-                            <span>Gatekeeper bypass included</span>
+                            <span>Auto-installs &amp; launches</span>
                         </div>
                         <div class="flex items-center gap-1 font-medium">
                             <i data-lucide="lock" class="w-3 h-3 text-ochre/40"></i>
@@ -461,7 +458,8 @@
             }
         }
 
-        setupCopy('copy-installer-btn', 'installer-cmd');
+        setupCopy('copy-mac-btn', 'mac-cmd');
+        setupCopy('copy-win-btn', 'win-cmd');
     </script>
 </body>
 
