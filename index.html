@@ -208,7 +208,7 @@
     .vf {
       position: absolute;
       z-index: 4;
-      inset: 76px calc(var(--gutter) / 2) 24px;
+      inset: 76px calc(var(--gutter) / 2) 140px;
       pointer-events: none;
       font-family: var(--f-text);
       font-size: clamp(14px, 3vh, 28px);
@@ -350,16 +350,16 @@
       z-index: 5;
       left: 0; right: 0; bottom: 0;
       display: grid;
-      gap: 20px;
-      padding: 24px var(--gutter) 32px;
+      gap: 14px;
+      padding: 20px var(--gutter) 24px;
       border-top: 1px solid var(--volt-dim);
       background: linear-gradient(to top, rgba(0, 17, 31, 0.82), rgba(0, 17, 31, 0.2));
     }
 
     .install-cmds {
       display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
+      flex-direction: column;
+      gap: 10px;
       align-items: stretch;
     }
 
@@ -372,8 +372,7 @@
       border: 1.2px solid var(--rule-strong);
       border-radius: 10px;
       background: var(--ink-1);
-      flex: 1;
-      min-width: 280px;
+      width: 100%;
     }
 
     .install-cmd-label {
@@ -738,16 +737,40 @@
       .section-split--reverse .feature-plate { order: -1; }
       .sticker { display: none; }
       .colophon { grid-template-columns: 1fr 1fr; }
+      .section { padding: 64px var(--gutter); }
+      .section-split { gap: 40px; }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: clamp(56px, 16vw, 120px); }
+      .vf { inset: 60px 12px 120px; }
+      .hero-strip { padding: 16px 16px 20px; }
+      .install-cmd { height: 38px; padding: 0 6px 0 12px; border-radius: 8px; }
+      .install-cmd-text { font-size: 11px; }
+      .install-cmd-copy { height: 26px; padding: 0 10px; font-size: 10px; }
+      .ticker-track span:not(.sep) { font-size: 22px; }
+      .ticker-track span:nth-child(4n+3) { font-size: 26px; }
+      .ticker-track--ghost span:not(.sep),
+      .ticker-track--ghost span:nth-child(4n+3) { font-size: 34px; }
     }
 
     @media (max-width: 640px) {
       .hero-line--offset { margin-left: 0.9em; }
       .hero-swash { font-size: clamp(14px, 4vw, 24px); }
-      .hero-strip { padding: 18px 16px 24px; }
-      .install-cmd { min-width: 0; flex: unset; width: 100%; }
-      .vf { inset: 60px 10px 24px; }
+      .vf { inset: 50px 8px 110px; }
       .vf-label { font-size: 12px; }
       .colophon { grid-template-columns: 1fr; }
+      .section { padding: 48px 16px; }
+      .section-heading { font-size: clamp(24px, 7vw, 36px); }
+      .section-body { font-size: 15px; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title { font-size: clamp(44px, 18vw, 72px); }
+      .hero-kicker { font-size: 10px; margin-bottom: 14px; }
+      .install-cmd-label { font-size: 9px; }
+      .install-cmd-text { font-size: 10px; }
+      .vf { inset: 44px 6px 100px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
