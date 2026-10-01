@@ -1,498 +1,946 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Screendial — Native Desktop Copilot</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screendial — Your Desktop, Narrated</title>
+  <meta name="description" content="Screendial watches your screen and talks you through any app. Voice in, guidance out — drawn right on the display.">
+  <link rel="icon" href="icon.png" type="image/png">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* ── Fonts ── */
+    @font-face {
+      font-family: 'Advent Pro';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url(fonts/AdventPro-normal-300.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Advent Pro';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(fonts/AdventPro-normal-400.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Advent Pro';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(fonts/AdventPro-normal-500.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Advent Pro';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url(fonts/AdventPro-normal-600.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Advent Pro';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(fonts/AdventPro-normal-700.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Blue Ocean';
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url(fonts/BlueOcean-normal-400-700.woff2) format('woff2');
+    }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    /* ── Tokens ── */
+    :root {
+      --ink-0: #00111f;
+      --ink-1: #001a2b;
+      --ink-2: #062b43;
+      --electric: #2f6bff;
+      --cobalt: #1636e8;
+      --violet: #3d1a8a;
+      --magenta: #d61f82;
+      --hot: #ff3d9a;
+      --ember: #ff6a1a;
+      --teal: #3cc6c0;
+      --volt: #efff00;
+      --volt-dim: rgba(239, 255, 0, 0.34);
+      --fg: #e9edf2;
+      --fg-dim: rgba(233, 237, 242, 0.72);
+      --fg-faint: rgba(233, 237, 242, 0.5);
+      --swash: #ffe6f2;
+      --rule: rgba(233, 237, 242, 0.09);
+      --rule-strong: rgba(233, 237, 242, 0.2);
+      --f-display: "Blue Ocean", "Iowan Old Style", Georgia, serif;
+      --f-text: "Advent Pro", "Helvetica Neue", Arial, sans-serif;
+      --f-code: ui-monospace, "SF Mono", Menlo, monospace;
+      --ease-out: cubic-bezier(0.2, 0.7, 0.1, 1);
+      --gutter: clamp(20px, 6vw, 96px);
+      --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      color-scheme: dark;
+    }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        luxury: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-                        body: ['"Inter"', 'system-ui', 'sans-serif'],
-                    },
-                    colors: {
-                        volt: '#efff00',
-                        void: '#0a0a0f',
-                        slate: '#14141c',
-                        mist: '#e8e8f0',
-                    }
-                }
-            }
-        }
-    </script>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: var(--ink-0);
+      color: var(--fg);
+      font-family: var(--f-text);
+      font-size: 15px;
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    button, input { font: inherit; color: inherit; }
+    ::selection { background: var(--volt); color: var(--ink-0); }
 
-    <style>
-        :root {
-            --volt: #efff00;
-            --volt-dim: rgba(239, 255, 0, 0.15);
-            --volt-glow: rgba(239, 255, 0, 0.06);
-            --void: #0a0a0f;
-            --slate: #14141c;
-            --mist: #e8e8f0;
-            --mist-dim: rgba(232, 232, 240, 0.5);
-            --mist-faint: rgba(232, 232, 240, 0.25);
-            --glass-bg: rgba(239, 255, 0, 0.03);
-            --glass-border: rgba(239, 255, 0, 0.08);
-        }
+    /* ── Grain overlay ── */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      background-image: var(--grain);
+      opacity: 0.035;
+    }
 
-        body {
-            background-color: var(--void);
-            color: var(--mist);
-            font-family: "Inter", system-ui, sans-serif;
-            overflow-x: hidden;
-        }
+    /* ── Meta label ── */
+    .meta {
+      font-family: var(--f-text);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--fg-dim);
+    }
 
-        ::selection {
-            background: var(--volt);
-            color: var(--void);
-        }
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow: hidden;
+      isolation: isolate;
+      display: flex;
+      align-items: center;
+      background: var(--ink-0);
+    }
 
-        /* floating orbs — surreal ambient */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(80px);
-        }
-        .orb-1 {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(239, 255, 0, 0.07), transparent 70%);
-            top: -10%; left: 15%;
-            animation: orb-drift-1 20s ease-in-out infinite;
-        }
-        .orb-2 {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(120, 80, 255, 0.04), transparent 70%);
-            bottom: 10%; right: -5%;
-            animation: orb-drift-2 25s ease-in-out infinite;
-        }
-        .orb-3 {
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(239, 255, 0, 0.04), transparent 70%);
-            top: 50%; left: -8%;
-            animation: orb-drift-3 18s ease-in-out infinite;
-        }
+    /* Animated gradient background (CSS-only approximation of the tape canvas) */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(40% 55% at 62% 55%, rgba(255, 106, 26, 0.55), transparent 70%),
+        radial-gradient(60% 30% at 30% 18%, rgba(236, 42, 140, 0.5), transparent 70%),
+        radial-gradient(70% 50% at 20% 80%, rgba(22, 54, 232, 0.6), transparent 70%),
+        linear-gradient(var(--violet), var(--ink-0));
+      animation: bg-drift 18s ease-in-out infinite alternate;
+    }
 
-        @keyframes orb-drift-1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(60px, 40px) scale(1.1); }
-            66% { transform: translate(-30px, 80px) scale(0.95); }
-        }
-        @keyframes orb-drift-2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-50px, -60px) scale(1.15); }
-        }
-        @keyframes orb-drift-3 {
-            0%, 100% { transform: translate(0, 0); }
-            40% { transform: translate(40px, -30px); }
-            80% { transform: translate(-20px, 50px); }
-        }
+    @keyframes bg-drift {
+      0% { filter: brightness(0.9) hue-rotate(0deg); }
+      50% { filter: brightness(1.1) hue-rotate(8deg); }
+      100% { filter: brightness(0.95) hue-rotate(-5deg); }
+    }
 
-        /* glass card */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px) saturate(130%);
-            -webkit-backdrop-filter: blur(24px) saturate(130%);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow:
-                inset 0 1px 0 0 rgba(239, 255, 0, 0.04),
-                0 20px 60px -15px rgba(0, 0, 0, 0.7);
-            transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s;
-        }
-        .glass:hover {
-            border-color: rgba(239, 255, 0, 0.15);
-            transform: translateY(-2px);
-            box-shadow:
-                inset 0 1px 0 0 rgba(239, 255, 0, 0.06),
-                0 24px 70px -15px rgba(0, 0, 0, 0.8);
-        }
+    /* Scanlines */
+    .hero-scanlines {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0 2px,
+        rgba(0, 0, 0, 0.15) 2px 3px
+      );
+    }
 
-        /* hero entrance — bouncy cartoon pop */
-        @keyframes pop-in {
-            0% {
-                opacity: 0;
-                transform: scale(0.3) rotate(-8deg);
-                filter: blur(10px);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.08) rotate(2deg);
-                filter: blur(0);
-            }
-            70% {
-                transform: scale(0.96) rotate(-1deg);
-            }
-            85% {
-                transform: scale(1.02) rotate(0.5deg);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotate(0deg);
-                filter: blur(0);
-            }
-        }
+    /* Hum bar */
+    .hero-hum {
+      position: absolute;
+      inset: auto 0;
+      top: 0;
+      height: 22%;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255, 255, 255, 0.04) 40%,
+        rgba(255, 240, 255, 0.07) 50%,
+        rgba(255, 255, 255, 0.04) 60%,
+        transparent
+      );
+      animation: hum-bar 11.3s linear infinite;
+    }
 
-        @keyframes slide-up-bounce {
-            0% {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            60% {
-                opacity: 1;
-                transform: translateY(-8px);
-            }
-            80% {
-                transform: translateY(3px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    @keyframes hum-bar {
+      from { transform: translateY(-120%); }
+      to { transform: translateY(560%); }
+    }
 
-        @keyframes wobble-in {
-            0% {
-                opacity: 0;
-                transform: translateX(-30px) rotate(-5deg);
-            }
-            40% {
-                opacity: 1;
-                transform: translateX(8px) rotate(2deg);
-            }
-            60% {
-                transform: translateX(-4px) rotate(-1deg);
-            }
-            80% {
-                transform: translateX(2px) rotate(0.5deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0) rotate(0);
-            }
-        }
+    /* Vignette */
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(0, 5, 14, 0.62) 100%);
+    }
 
-        @keyframes float-dreamy {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-12px) rotate(1deg); }
-            75% { transform: translateY(6px) rotate(-0.5deg); }
-        }
+    /* Left-side readability scrim */
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(0, 8, 20, 0.6) 0%, rgba(0, 8, 20, 0.28) 45%, transparent 72%);
+    }
 
-        @keyframes gentle-spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+    /* ── Viewfinder ── */
+    .vf {
+      position: absolute;
+      z-index: 4;
+      inset: 76px calc(var(--gutter) / 2) 24px;
+      pointer-events: none;
+      font-family: var(--f-text);
+      font-size: clamp(14px, 3vh, 28px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: #fff;
+      text-shadow:
+        1.5px 0 rgba(255, 30, 120, 0.55),
+        -1.5px 0 rgba(0, 190, 255, 0.55),
+        0 0 10px rgba(255, 255, 255, 0.3);
+    }
 
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(239, 255, 0, 0.15); }
-            50% { box-shadow: 0 0 40px rgba(239, 255, 0, 0.3), 0 0 80px rgba(239, 255, 0, 0.1); }
-        }
+    .vf-frame {
+      --c: rgba(255, 255, 255, 0.92);
+      --a: clamp(40px, 12vw, 160px);
+      --w: 2px;
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(var(--c), var(--c)) top left / var(--a) var(--w),
+        linear-gradient(var(--c), var(--c)) top left / var(--w) var(--a),
+        linear-gradient(var(--c), var(--c)) top right / var(--a) var(--w),
+        linear-gradient(var(--c), var(--c)) top right / var(--w) var(--a),
+        linear-gradient(var(--c), var(--c)) bottom left / var(--a) var(--w),
+        linear-gradient(var(--c), var(--c)) bottom left / var(--w) var(--a),
+        linear-gradient(var(--c), var(--c)) bottom right / var(--a) var(--w),
+        linear-gradient(var(--c), var(--c)) bottom right / var(--w) var(--a);
+      background-repeat: no-repeat;
+      filter: drop-shadow(1px 0 rgba(255, 30, 120, 0.5)) drop-shadow(-1px 0 rgba(0, 190, 255, 0.5));
+      animation: vf-lock 0.9s var(--ease-out) both;
+    }
 
-        .pop-in { animation: pop-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-        .slide-up { animation: slide-up-bounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-        .wobble-in { animation: wobble-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-        .float-dreamy { animation: float-dreamy 8s ease-in-out infinite; }
+    @keyframes vf-lock {
+      0% { opacity: 0; transform: scale(1.07); }
+      25% { opacity: 1; }
+      45% { transform: scale(0.975); }
+      70% { transform: scale(1.01); }
+      100% { opacity: 1; transform: none; }
+    }
 
-        .d1 { animation-delay: 0.1s; }
-        .d2 { animation-delay: 0.25s; }
-        .d3 { animation-delay: 0.4s; }
-        .d4 { animation-delay: 0.55s; }
-        .d5 { animation-delay: 0.7s; }
-        .d6 { animation-delay: 0.85s; }
-        .d7 { animation-delay: 1.0s; }
-        .d8 { animation-delay: 1.15s; }
+    .vf-label {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+      white-space: nowrap;
+      animation: vf-label-in 0.45s steps(3) 0.5s both;
+    }
 
-        /* app icon with dreamy float + glow */
-        .icon-float {
-            animation: float-dreamy 6s ease-in-out infinite, pulse-glow 4s ease-in-out infinite;
-            border-radius: 22%;
-        }
+    @keyframes vf-label-in {
+      0% { opacity: 0; }
+      34% { opacity: 1; }
+      67% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
 
-        /* luxury mixed-weight heading */
-        .hero-line {
-            font-family: "Cormorant Garamond", Georgia, serif;
-            line-height: 1;
-        }
-        .hero-light {
-            font-weight: 300;
-            font-style: italic;
-            color: var(--mist-dim);
-        }
-        .hero-bold {
-            font-weight: 700;
-            color: var(--volt);
-        }
-        .hero-thin {
-            font-weight: 300;
-            letter-spacing: 0.12em;
-            color: var(--mist-faint);
-            text-transform: uppercase;
-            font-style: normal;
-        }
+    .vf-tl { top: clamp(12px, 4vh, 40px); left: clamp(14px, calc(var(--gutter) / 2), 48px); }
+    .vf-tr { top: clamp(12px, 4vh, 40px); right: clamp(14px, calc(var(--gutter) / 2), 48px); }
+    .vf-bl { bottom: clamp(12px, 4vh, 40px); left: clamp(14px, calc(var(--gutter) / 2), 48px); }
+    .vf-br { bottom: clamp(12px, 4vh, 40px); right: clamp(14px, calc(var(--gutter) / 2), 48px); }
 
-        /* rec dot */
-        .rec-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #ff2e3f;
-            box-shadow: 0 0 8px rgba(255, 46, 63, 0.8);
-            animation: pulse-rec 2s ease-in-out infinite;
-        }
-        @keyframes pulse-rec {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
+    .vf-rec-dot {
+      width: 0.46em;
+      height: 0.46em;
+      border-radius: 50%;
+      background: #ff2e3f;
+      box-shadow: 0 0 0.4em rgba(255, 46, 63, 0.8);
+      animation: osd-blink 1.4s steps(1) infinite;
+    }
 
-        /* decorative star */
-        .star-spin {
-            animation: gentle-spin 12s linear infinite;
-            color: var(--volt);
-            opacity: 0.3;
-        }
+    .vf-colon { animation: osd-blink 1s steps(1) infinite; }
 
-        /* terminal block */
-        .terminal-block {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(239, 255, 0, 0.06);
-            border-radius: 14px;
-            transition: border-color 0.3s;
-        }
-        .terminal-block:hover {
-            border-color: rgba(239, 255, 0, 0.15);
-        }
+    .tc-d {
+      display: inline-block;
+      width: 0.5em;
+      letter-spacing: 0;
+      text-align: center;
+    }
+    .tc-sep, .vf-colon { margin: 0 0.07em; }
 
-        /* feature icon circle */
-        .feat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(239, 255, 0, 0.06);
-            border: 1px solid rgba(239, 255, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--volt);
-            transition: background 0.3s, transform 0.3s;
-        }
-        .glass:hover .feat-icon {
-            background: rgba(239, 255, 0, 0.12);
-            transform: scale(1.1) rotate(-5deg);
-        }
-    </style>
+    @keyframes osd-blink {
+      0%, 62% { opacity: 1; }
+      63%, 100% { opacity: 0.15; }
+    }
+
+    /* ── Hero content ── */
+    .hero-copy {
+      position: relative;
+      z-index: 5;
+      padding: 0 var(--gutter);
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .hero-kicker {
+      color: var(--volt);
+      margin: 0 0 22px;
+      font-size: 11.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .hero-title {
+      display: grid;
+      justify-items: start;
+      font-family: var(--f-display);
+      font-weight: 400;
+      font-size: clamp(72px, 14vw, 220px);
+      line-height: 0.86;
+      letter-spacing: -0.02em;
+      color: var(--volt);
+      text-shadow: 0 2px 40px rgba(0, 8, 20, 0.35);
+    }
+
+    .hero-line { display: block; }
+    .hero-line--offset { margin-left: 1.35em; }
+
+    .hero-swash {
+      display: block;
+      margin-top: 0.15em;
+      margin-left: 0.06em;
+      font-family: var(--f-text);
+      font-style: normal;
+      font-weight: 300;
+      font-size: clamp(16px, 2.8vw, 44px);
+      letter-spacing: 0.01em;
+      line-height: 1.05;
+      white-space: nowrap;
+      color: var(--swash);
+      rotate: -5deg;
+      text-shadow: 0 1px 24px rgba(0, 8, 20, 0.55);
+    }
+
+    /* ── Install strip ── */
+    .hero-strip {
+      position: absolute;
+      z-index: 5;
+      left: 0; right: 0; bottom: 0;
+      display: grid;
+      gap: 20px;
+      padding: 24px var(--gutter) 32px;
+      border-top: 1px solid var(--volt-dim);
+      background: linear-gradient(to top, rgba(0, 17, 31, 0.82), rgba(0, 17, 31, 0.2));
+    }
+
+    .install-cmds {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .install-cmd {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 42px;
+      padding: 0 8px 0 18px;
+      border: 1.2px solid var(--rule-strong);
+      border-radius: 10px;
+      background: var(--ink-1);
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .install-cmd-label {
+      font-family: var(--f-text);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--volt);
+      flex: none;
+    }
+
+    .install-cmd-text {
+      font-family: var(--f-code);
+      font-size: 12.5px;
+      color: var(--fg-dim);
+      white-space: nowrap;
+      overflow-x: auto;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .install-cmd-text::before { content: "$ "; color: var(--fg-faint); }
+    .install-cmd--ps .install-cmd-text::before { content: "> "; }
+
+    .install-cmd-copy {
+      flex: none;
+      height: 30px;
+      padding: 0 14px;
+      border: 1px solid var(--rule-strong);
+      border-radius: 7px;
+      background: none;
+      color: var(--fg);
+      font-family: var(--f-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .install-cmd-copy:hover {
+      background: var(--volt);
+      color: var(--ink-0);
+      border-color: var(--volt);
+    }
+
+    .install-cmd-note {
+      margin-top: 4px;
+    }
+
+    /* ── Stickers (parallax art) ── */
+    .sticker {
+      position: absolute;
+      z-index: 6;
+      width: clamp(100px, 14vw, 200px);
+      height: auto;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 12px 16px rgba(0, 5, 14, 0.55));
+    }
+
+    .sticker--camera {
+      top: 12%;
+      right: 8%;
+      rotate: 6deg;
+      animation: float-a 8s ease-in-out infinite alternate;
+    }
+
+    .sticker--magnifier {
+      bottom: 28%;
+      right: 14%;
+      rotate: -4deg;
+      animation: float-b 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes float-a {
+      from { transform: translateY(0); }
+      to { transform: translateY(-18px); }
+    }
+
+    @keyframes float-b {
+      from { transform: translateY(0) rotate(0deg); }
+      to { transform: translateY(-12px) rotate(3deg); }
+    }
+
+    /* ── Sections below hero ── */
+    .section {
+      position: relative;
+      padding: 96px var(--gutter);
+      border-top: 1px solid var(--rule);
+    }
+
+    .section-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-copy { display: grid; gap: 22px; }
+
+    .section-heading {
+      font-family: var(--f-display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 400;
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--volt);
+    }
+
+    .section-heading .swash {
+      font-family: var(--f-text);
+      font-weight: 300;
+      text-transform: none;
+      font-size: 0.52em;
+      color: var(--swash);
+      margin-left: 0.1em;
+    }
+
+    .section-body {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--fg-dim);
+    }
+
+    .section-body p + p { margin-top: 16px; }
+
+    .feature-plate {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--ink-1);
+      border: 1px solid var(--rule);
+    }
+
+    .feature-plate-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(22, 54, 232, 0.4), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(94, 62, 192, 0.3), transparent 60%),
+        var(--ink-1);
+    }
+
+    .feature-plate-scanlines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0, 0, 0, 0.12) 2px 3px);
+    }
+
+    .feature-plate-label {
+      position: absolute;
+      bottom: 20px;
+      left: 24px;
+      z-index: 2;
+    }
+
+    .fig-num {
+      position: absolute;
+      z-index: 1;
+      right: 24px;
+      top: 30%;
+      font-family: var(--f-display);
+      font-size: clamp(80px, 14vw, 200px);
+      font-weight: 400;
+      line-height: 0.8;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 244, 232, 0.4);
+      pointer-events: none;
+    }
+
+    /* ── App tags ── */
+    .app-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .app-tag {
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 16px;
+      border: 1px solid var(--rule-strong);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--fg-dim);
+    }
+
+    /* ── Ticker ── */
+    .ticker {
+      display: grid;
+      gap: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 20px 0 16px;
+      border-block: 1px solid var(--volt-dim);
+      background:
+        repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 3px),
+        var(--ink-1);
+      rotate: -1.6deg;
+      scale: 1.04;
+    }
+
+    .ticker-track {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      animation: ticker-scroll 40s linear infinite;
+    }
+
+    .ticker-track--reverse {
+      animation-direction: reverse;
+    }
+
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .ticker-track > * { margin-right: 30px; }
+
+    .ticker-track span:not(.sep) {
+      font-family: var(--f-display);
+      font-size: 28px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+    }
+
+    .ticker-track span:nth-child(4n+3) {
+      font-family: var(--f-text);
+      font-style: normal;
+      font-weight: 300;
+      text-transform: none;
+      color: var(--swash);
+      font-size: 32px;
+    }
+
+    .ticker-track--ghost span:not(.sep),
+    .ticker-track--ghost span:nth-child(4n+3) {
+      font-family: var(--f-display);
+      font-size: 44px;
+      font-weight: 400;
+      line-height: 1.05;
+      text-transform: none;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(239, 255, 0, 0.55);
+    }
+
+    .ticker-track--ghost span:nth-child(4n+3) {
+      -webkit-text-stroke-color: rgba(255, 230, 242, 0.6);
+    }
+
+    .sep {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin: 0 0.9em;
+      border: 1.5px solid var(--volt);
+      border-radius: 50%;
+      vertical-align: 0.1em;
+    }
+
+    /* ── Colophon ── */
+    .colophon {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      padding: 64px var(--gutter) 40px;
+    }
+
+    .colophon-mark {
+      position: absolute;
+      z-index: -1;
+      right: -0.04em;
+      bottom: -0.2em;
+      font-family: var(--f-display);
+      font-size: clamp(100px, 18vw, 280px);
+      line-height: 1;
+      white-space: nowrap;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(239, 255, 0, 0.16);
+      pointer-events: none;
+    }
+
+    .colophon .meta { margin-bottom: 10px; display: block; }
+    .colophon p:not(.meta) { font-size: 14px; line-height: 1.5; color: var(--fg-dim); }
+
+    .colophon-end {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .colophon-end .meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .osd-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff2e3f;
+      box-shadow: 0 0 8px rgba(255, 46, 63, 0.8);
+      animation: osd-blink 1.4s steps(1) infinite;
+    }
+
+    .text-btn {
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-family: var(--f-text);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--volt);
+      padding: 10px 0;
+    }
+
+    .text-btn:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+
+    .reveal.is-shown {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .section-split { grid-template-columns: 1fr; }
+      .section-split--reverse .feature-plate { order: -1; }
+      .sticker { display: none; }
+      .colophon { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-line--offset { margin-left: 0.9em; }
+      .hero-swash { font-size: clamp(14px, 4vw, 24px); }
+      .hero-strip { padding: 18px 16px 24px; }
+      .install-cmd { min-width: 0; flex: unset; width: 100%; }
+      .vf { inset: 60px 10px 24px; }
+      .vf-label { font-size: 12px; }
+      .colophon { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+      .hero-hum { display: none; }
+    }
+  </style>
 </head>
 
-<body class="min-h-screen flex flex-col relative">
+<body>
 
-    <!-- ambient orbs -->
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
+  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-scanlines"></div>
+    <div class="hero-hum"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-scrim"></div>
 
-    <!-- HEADER -->
-    <header class="w-full max-w-5xl mx-auto px-6 py-8 flex justify-between items-center relative z-10 slide-up d1">
-        <div class="flex items-center space-x-3">
-            <img src="icon.png" alt="Screendial" class="w-8 h-8 rounded-lg" style="border-radius: 22%;">
-            <span class="text-[11px] font-luxury font-medium tracking-[0.15em] text-mist/50 italic">
-                Screendial
-            </span>
+    <!-- Viewfinder -->
+    <div class="vf">
+      <div class="vf-frame"></div>
+      <span class="vf-label vf-tl"><span class="vf-rec-dot"></span> REC</span>
+      <span class="vf-label vf-tr" id="vf-clock"></span>
+      <span class="vf-label vf-bl">VHS</span>
+      <span class="vf-label vf-br" id="vf-timecode"></span>
+    </div>
+
+    <!-- Stickers -->
+    <img class="sticker sticker--camera" src="art/camera.png" alt="" draggable="false">
+    <img class="sticker sticker--magnifier" src="art/magnifier.png" alt="" draggable="false">
+
+    <!-- Copy -->
+    <div class="hero-copy">
+      <p class="hero-kicker meta">Your Desktop Copilot</p>
+      <h1 class="hero-title">
+        <span class="hero-line">Screen</span>
+        <span class="hero-line hero-line--offset">Dial</span>
+      </h1>
+      <em class="hero-swash">your desktop, narrated</em>
+    </div>
+
+    <!-- Install strip -->
+    <div class="hero-strip">
+      <div class="install-cmds">
+        <div class="install-cmd">
+          <span class="install-cmd-label">macOS</span>
+          <span class="install-cmd-text" id="mac-cmd-text">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</span>
+          <button class="install-cmd-copy" data-cmd="mac">Copy</button>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="rec-dot"></span>
-            <span class="text-[9px] font-medium tracking-[0.2em] uppercase text-mist/30">v0.1.0</span>
+        <div class="install-cmd install-cmd--ps">
+          <span class="install-cmd-label">Windows</span>
+          <span class="install-cmd-text" id="win-cmd-text">irm https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.ps1 | iex</span>
+          <button class="install-cmd-copy" data-cmd="win">Copy</button>
         </div>
-    </header>
+      </div>
+      <p class="install-cmd-note meta">Paste into Terminal (macOS) or PowerShell (Windows) to install</p>
+    </div>
+  </section>
 
-    <!-- HERO -->
-    <main class="w-full max-w-4xl mx-auto px-6 flex-grow flex flex-col justify-center items-center relative z-10">
-
-        <div class="text-center w-full space-y-14">
-
-            <!-- App icon -->
-            <div class="pop-in d2 flex justify-center">
-                <img src="icon.png" alt="Screendial" class="w-28 h-28 sm:w-36 sm:h-36 icon-float shadow-2xl">
-            </div>
-
-            <!-- Luxury mixed-weight title -->
-            <div class="space-y-3 slide-up d3">
-                <h1 class="hero-line text-6xl sm:text-7xl lg:text-8xl">
-                    <span class="hero-light">Your</span>
-                    <span class="hero-bold"> Screen,</span>
-                </h1>
-                <h1 class="hero-line text-5xl sm:text-6xl lg:text-7xl">
-                    <span class="hero-bold">Decoded</span><span class="hero-light">.</span>
-                </h1>
-            </div>
-
-            <!-- Subtitle -->
-            <p class="text-sm sm:text-base font-light text-mist/40 max-w-lg mx-auto leading-relaxed slide-up d4">
-                An intelligent overlay that sees your screen, speaks to you,
-                and draws step-by-step guidance on top of any application.
-            </p>
-
-            <!-- Decorative star -->
-            <div class="flex justify-center slide-up d4">
-                <svg class="star-spin" width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 0L9.8 6.2L16 8L9.8 9.8L8 16L6.2 9.8L0 8L6.2 6.2Z"/>
-                </svg>
-            </div>
-
-            <!-- Install Section -->
-            <div class="max-w-xl mx-auto wobble-in d5">
-                <div class="p-7 glass text-left space-y-5">
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5 text-volt">
-                            <i data-lucide="terminal" class="w-4 h-4 shrink-0"></i>
-                            <span class="text-[10px] font-luxury font-semibold uppercase tracking-[0.2em] italic">Install</span>
-                        </div>
-                    </div>
-
-                    <!-- macOS -->
-                    <div>
-                        <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="apple" class="w-3.5 h-3.5 text-mist/40"></i>
-                            <span class="text-[10px] font-medium text-mist/40 uppercase tracking-wider">macOS</span>
-                        </div>
-                        <div class="flex items-center justify-between terminal-block px-4 py-3 font-mono text-[11px] text-volt/80">
-                            <code id="mac-cmd" class="select-all break-all">curl -fsSL https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.sh | bash</code>
-                            <button id="copy-mac-btn" class="text-mist/20 hover:text-volt transition-colors duration-300 p-1 shrink-0 ml-3" title="Copy">
-                                <i data-lucide="copy" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Windows -->
-                    <div>
-                        <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="monitor" class="w-3.5 h-3.5 text-mist/40"></i>
-                            <span class="text-[10px] font-medium text-mist/40 uppercase tracking-wider">Windows (PowerShell)</span>
-                        </div>
-                        <div class="flex items-center justify-between terminal-block px-4 py-3 font-mono text-[11px] text-volt/80">
-                            <code id="win-cmd" class="select-all break-all">irm https://raw.githubusercontent.com/idaraabasiudoh/screendial-web/main/install.ps1 | iex</code>
-                            <button id="copy-win-btn" class="text-mist/20 hover:text-volt transition-colors duration-300 p-1 shrink-0 ml-3" title="Copy">
-                                <i data-lucide="copy" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between pt-3 border-t border-volt/5 text-[10px] text-mist/25">
-                        <div class="flex items-center gap-1.5">
-                            <i data-lucide="shield-check" class="w-3.5 h-3.5 stroke-[1.8] text-volt/40"></i>
-                            <span>Auto-installs &amp; launches</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <i data-lucide="lock" class="w-3 h-3 text-volt/25"></i>
-                            <span>Secure sync</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Feature Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto text-left pt-4">
-
-                <div class="p-6 glass flex items-start space-x-4 slide-up d5">
-                    <div class="feat-icon shrink-0">
-                        <i data-lucide="eye" class="w-5 h-5 stroke-[1.5]"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Transparent HUD</h3>
-                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
-                            Frameless fullscreen overlay. Clicks pass through transparent regions
-                            while highlights anchor above on-screen elements.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="p-6 glass flex items-start space-x-4 slide-up d6">
-                    <div class="feat-icon shrink-0">
-                        <i data-lucide="mic" class="w-5 h-5 stroke-[1.5]"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Voice &amp; Vision</h3>
-                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
-                            ElevenLabs voice synthesis. Coordinate-accurate brackets
-                            lock onto UI elements across all connected displays.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="p-6 glass flex items-start space-x-4 slide-up d7">
-                    <div class="feat-icon shrink-0">
-                        <i data-lucide="user" class="w-5 h-5 stroke-[1.5]"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Cloud Accounts</h3>
-                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
-                            Email &amp; password sign-in. Conversation history
-                            syncs securely across devices.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="p-6 glass flex items-start space-x-4 slide-up d8">
-                    <div class="feat-icon shrink-0">
-                        <i data-lucide="layers" class="w-5 h-5 stroke-[1.5]"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-luxury font-semibold text-volt italic">Tool Widgets</h3>
-                        <p class="text-[11px] text-mist/30 mt-1.5 leading-relaxed font-light">
-                            Interactive checklists, code overlays, command palette.
-                            Global hotkeys and wake-word activation.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
+  <!-- ═══════════════════════ SECTION 1 ═══════════════════════ -->
+  <section class="section">
+    <div class="section-split reveal">
+      <div class="feature-plate">
+        <div class="feature-plate-bg"></div>
+        <div class="feature-plate-scanlines"></div>
+        <span class="fig-num">01</span>
+        <div class="feature-plate-label meta">Fig. 01 — Screen Analysis</div>
+      </div>
+      <div class="section-copy">
+        <h2 class="section-heading">See Everything <span class="swash">at once</span></h2>
+        <div class="section-body">
+          <p>Screendial watches every pixel on every monitor. Ask a question about what's on screen and it reads the display, identifies the active app, and draws its answer right on top — highlights, checklists, code overlays.</p>
+          <p>Voice in, guidance out. No tab-switching, no copying error messages into a chat window. Just speak and see.</p>
         </div>
+        <ul class="app-tags">
+          <li class="app-tag">DaVinci Resolve</li>
+          <li class="app-tag">VS Code</li>
+          <li class="app-tag">Safari</li>
+          <li class="app-tag">Finder</li>
+          <li class="app-tag">Excel</li>
+          <li class="app-tag">Any App</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-    </main>
+  <!-- ═══════════════════════ SECTION 2 ═══════════════════════ -->
+  <section class="section">
+    <div class="section-split section-split--reverse reveal">
+      <div class="section-copy">
+        <h2 class="section-heading">Draws On <span class="swash">your screen</span></h2>
+        <div class="section-body">
+          <p>Answers aren't just text. Screendial highlights UI elements, overlays step-by-step checklists, and puts code snippets exactly where you need them — all on a transparent layer above your work.</p>
+          <p>Built with Gemini's vision and ElevenLabs' voice. Runs locally as a native Tauri app — no browser required, no screen data leaves your machine except to the model.</p>
+        </div>
+      </div>
+      <div class="feature-plate">
+        <div class="feature-plate-bg" style="background: radial-gradient(circle at 60% 50%, rgba(94, 62, 192, 0.4), transparent 60%), radial-gradient(circle at 30% 70%, rgba(60, 198, 192, 0.3), transparent 60%), var(--ink-1);"></div>
+        <div class="feature-plate-scanlines"></div>
+        <span class="fig-num">02</span>
+        <div class="feature-plate-label meta">Fig. 02 — On-Screen Tools</div>
+      </div>
+    </div>
+  </section>
 
-    <!-- FOOTER -->
-    <footer class="w-full max-w-5xl mx-auto px-6 py-14 relative z-10 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <span class="text-[9px] font-luxury italic text-mist/15 tracking-widest">Screendial v0.1.0</span>
-        <span class="text-[9px] font-luxury italic text-mist/15 tracking-widest">&copy; 2025 Screendial</span>
-    </footer>
+  <!-- ═══════════════════════ TICKER ═══════════════════════ -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Screen</span><span class="sep"></span><span>narrated</span><span class="sep"></span>
+      <span>Dial</span><span class="sep"></span><span>your desktop</span><span class="sep"></span>
+      <span>Voice</span><span class="sep"></span><span>guidance</span><span class="sep"></span>
+      <span>See</span><span class="sep"></span><span>everything</span><span class="sep"></span>
+      <!-- duplicate for seamless loop -->
+      <span>Screen</span><span class="sep"></span><span>narrated</span><span class="sep"></span>
+      <span>Dial</span><span class="sep"></span><span>your desktop</span><span class="sep"></span>
+      <span>Voice</span><span class="sep"></span><span>guidance</span><span class="sep"></span>
+      <span>See</span><span class="sep"></span><span>everything</span><span class="sep"></span>
+    </div>
+    <div class="ticker-track ticker-track--ghost ticker-track--reverse">
+      <span>Highlight</span><span class="sep"></span><span>overlay</span><span class="sep"></span>
+      <span>Checklist</span><span class="sep"></span><span>on screen</span><span class="sep"></span>
+      <span>Code</span><span class="sep"></span><span>snippets</span><span class="sep"></span>
+      <span>Native</span><span class="sep"></span><span>desktop</span><span class="sep"></span>
+      <!-- duplicate -->
+      <span>Highlight</span><span class="sep"></span><span>overlay</span><span class="sep"></span>
+      <span>Checklist</span><span class="sep"></span><span>on screen</span><span class="sep"></span>
+      <span>Code</span><span class="sep"></span><span>snippets</span><span class="sep"></span>
+      <span>Native</span><span class="sep"></span><span>desktop</span><span class="sep"></span>
+    </div>
+  </div>
 
-    <script>
-        lucide.createIcons();
+  <!-- ═══════════════════════ COLOPHON ═══════════════════════ -->
+  <footer class="colophon">
+    <span class="colophon-mark">S°</span>
+    <div>
+      <p class="meta">About</p>
+      <p>Screendial is a native desktop copilot that watches your screen and talks you through any app — voice in, guidance drawn right on the display.</p>
+    </div>
+    <div>
+      <p class="meta">Stack</p>
+      <p>Tauri 2 · Rust · TypeScript · Gemini Vision · ElevenLabs Voice · Supabase Auth</p>
+    </div>
+    <div>
+      <p class="meta">Install</p>
+      <p>Paste the terminal command above into your shell to download and install. macOS and Windows supported.</p>
+    </div>
+    <div class="colophon-end">
+      <span class="meta"><span class="osd-dot"></span> End of tape</span>
+      <button class="text-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Rewind</button>
+    </div>
+  </footer>
 
-        function setupCopy(buttonId, textId) {
-            const btn = document.getElementById(buttonId);
-            if (btn) {
-                btn.addEventListener('click', () => {
-                    const text = document.getElementById(textId).innerText;
-                    navigator.clipboard.writeText(text).then(() => {
-                        const icon = btn.querySelector('[data-lucide]');
-                        if (icon) {
-                            icon.setAttribute('data-lucide', 'check');
-                            lucide.createIcons();
-                            setTimeout(() => {
-                                icon.setAttribute('data-lucide', 'copy');
-                                lucide.createIcons();
-                            }, 2000);
-                        }
-                    }).catch(err => console.error('Failed to copy: ', err));
-                });
-            }
-        }
+  <script>
+    // ── Clock (top-right viewfinder) ──
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('vf-clock').innerHTML =
+        `<span class="tc-d">${h[0]}</span><span class="tc-d">${h[1]}</span><span class="vf-colon">:</span><span class="tc-d">${m[0]}</span><span class="tc-d">${m[1]}</span>`;
+    }
+    updateClock();
+    setInterval(updateClock, 10000);
 
-        setupCopy('copy-mac-btn', 'mac-cmd');
-        setupCopy('copy-win-btn', 'win-cmd');
-    </script>
+    // ── Timecode (bottom-right viewfinder) ──
+    const tcStart = performance.now();
+    function updateTimecode() {
+      const elapsed = Math.floor((performance.now() - tcStart) / 1000);
+      const hh = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+      const mm = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+      const ss = String(elapsed % 60).padStart(2, '0');
+      const ff = String(Math.floor((performance.now() / 33.33) % 30)).padStart(2, '0');
+      const d = (s) => s.split('').map(c => `<span class="tc-d">${c}</span>`).join('');
+      document.getElementById('vf-timecode').innerHTML =
+        `${d(hh)}<span class="tc-sep">:</span>${d(mm)}<span class="tc-sep">:</span>${d(ss)}<span class="tc-sep">:</span>${d(ff)}`;
+    }
+    updateTimecode();
+    setInterval(updateTimecode, 33);
+
+    // ── Copy buttons ──
+    document.querySelectorAll('.install-cmd-copy').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cmd = btn.dataset.cmd;
+        const text = document.getElementById(cmd + '-cmd-text').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+      });
+    });
+
+    // ── Scroll reveals ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-shown'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
 </body>
-
 </html>
