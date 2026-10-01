@@ -722,13 +722,21 @@
     /* ── Reveal animation ── */
     .reveal {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
     }
 
     .reveal.is-shown {
-      opacity: 1;
-      transform: none;
+      animation: vhs-flicker 0.6s steps(4) forwards;
+    }
+
+    @keyframes vhs-flicker {
+      0%   { opacity: 0; }
+      15%  { opacity: 0.9; }
+      25%  { opacity: 0.2; }
+      40%  { opacity: 1; }
+      55%  { opacity: 0.4; }
+      70%  { opacity: 0.95; }
+      85%  { opacity: 0.6; }
+      100% { opacity: 1; }
     }
 
     /* ── Responsive ── */
