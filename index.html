@@ -208,7 +208,7 @@
     .vf {
       position: absolute;
       z-index: 4;
-      inset: 76px calc(var(--gutter) / 2) 140px;
+      inset: 76px calc(var(--gutter) / 2) calc(var(--strip-h, 150px) + 16px);
       pointer-events: none;
       font-family: var(--f-text);
       font-size: clamp(14px, 3vh, 28px);
@@ -751,7 +751,7 @@
 
     @media (max-width: 768px) {
       .hero-title { font-size: clamp(56px, 16vw, 120px); }
-      .vf { inset: 60px 12px 120px; }
+      .vf { inset: 60px 12px calc(var(--strip-h, 150px) + 12px); }
       .hero-strip { padding: 16px 16px 20px; }
       .install-cmd { height: 38px; padding: 0 6px 0 12px; border-radius: 8px; }
       .install-cmd-text { font-size: 11px; }
@@ -765,7 +765,7 @@
     @media (max-width: 640px) {
       .hero-line--offset { margin-left: 0.9em; }
       .hero-swash { font-size: clamp(14px, 4vw, 24px); }
-      .vf { inset: 50px 8px 110px; }
+      .vf { inset: 50px 8px calc(var(--strip-h, 150px) + 10px); }
       .vf-label { font-size: 12px; }
       .colophon { grid-template-columns: 1fr; }
       .section { padding: 48px 16px; }
@@ -794,7 +794,7 @@
       .hero-kicker { font-size: 10px; margin-bottom: 14px; }
       .install-cmd-label { font-size: 9px; }
       .install-cmd-text { font-size: 9.5px; }
-      .vf { inset: 44px 6px 100px; }
+      .vf { inset: 44px 6px calc(var(--strip-h, 150px) + 8px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -905,54 +905,12 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════ TICKER ═══════════════════════ -->
-  <div class="ticker">
-    <div class="ticker-track">
-      <span>Screen</span><span class="sep"></span><span>narrated</span><span class="sep"></span>
-      <span>Dial</span><span class="sep"></span><span>your desktop</span><span class="sep"></span>
-      <span>Voice</span><span class="sep"></span><span>guidance</span><span class="sep"></span>
-      <span>See</span><span class="sep"></span><span>everything</span><span class="sep"></span>
-      <!-- duplicate for seamless loop -->
-      <span>Screen</span><span class="sep"></span><span>narrated</span><span class="sep"></span>
-      <span>Dial</span><span class="sep"></span><span>your desktop</span><span class="sep"></span>
-      <span>Voice</span><span class="sep"></span><span>guidance</span><span class="sep"></span>
-      <span>See</span><span class="sep"></span><span>everything</span><span class="sep"></span>
-    </div>
-    <div class="ticker-track ticker-track--ghost ticker-track--reverse">
-      <span>Highlight</span><span class="sep"></span><span>overlay</span><span class="sep"></span>
-      <span>Checklist</span><span class="sep"></span><span>on screen</span><span class="sep"></span>
-      <span>Code</span><span class="sep"></span><span>snippets</span><span class="sep"></span>
-      <span>Native</span><span class="sep"></span><span>desktop</span><span class="sep"></span>
-      <!-- duplicate -->
-      <span>Highlight</span><span class="sep"></span><span>overlay</span><span class="sep"></span>
-      <span>Checklist</span><span class="sep"></span><span>on screen</span><span class="sep"></span>
-      <span>Code</span><span class="sep"></span><span>snippets</span><span class="sep"></span>
-      <span>Native</span><span class="sep"></span><span>desktop</span><span class="sep"></span>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════ COLOPHON ═══════════════════════ -->
-  <footer class="colophon">
-    <span class="colophon-mark">S°</span>
-    <div>
-      <p class="meta">About</p>
-      <p>Screendial is a native desktop copilot that watches your screen and talks you through any app — voice in, guidance drawn right on the display.</p>
-    </div>
-    <div>
-      <p class="meta">Stack</p>
-      <p>Tauri 2 · Rust · TypeScript · Gemini Vision · ElevenLabs Voice · Supabase Auth</p>
-    </div>
-    <div>
-      <p class="meta">Install</p>
-      <p>Paste the terminal command above into your shell to download and install. macOS and Windows supported.</p>
-    </div>
-    <div class="colophon-end">
-      <span class="meta"><span class="osd-dot"></span> End of tape</span>
-      <button class="text-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Rewind</button>
-    </div>
-  </footer>
-
   <script>
+    // Keep the viewfinder's bottom corners just above the install strip
+    const strip = document.querySelector('.hero-strip');
+    const setStrip = () => document.documentElement.style.setProperty('--strip-h', strip.offsetHeight + 'px');
+    new ResizeObserver(setStrip).observe(strip);
+    setStrip();
     // ── Clock (top-right viewfinder) ──
     function updateClock() {
       const now = new Date();
