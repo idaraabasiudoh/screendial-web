@@ -429,7 +429,7 @@
     .sticker {
       position: absolute;
       z-index: 6;
-      width: clamp(100px, 14vw, 200px);
+      width: clamp(72px, 16vw, 200px);
       height: auto;
       pointer-events: none;
       user-select: none;
@@ -743,7 +743,8 @@
     @media (max-width: 960px) {
       .section-split { grid-template-columns: 1fr; }
       .section-split--reverse .feature-plate { order: -1; }
-      .sticker { display: none; }
+      .sticker--camera { top: 14%; right: 6%; }
+      .sticker--magnifier { bottom: calc(var(--strip-h, 150px) + 48px); right: 8%; }
       .colophon { grid-template-columns: 1fr 1fr; }
       .section { padding: 64px var(--gutter); }
       .section-split { gap: 40px; }
