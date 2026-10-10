@@ -1,0 +1,330 @@
+/* Screendial website: black and white, blue where it helps, set in Inter. */
+
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --text-dim: rgba(255, 255, 255, 0.72);
+  --text-faint: rgba(255, 255, 255, 0.5);
+  --line: rgba(255, 255, 255, 0.14);
+  --blue: #3b82f6;
+  --gutter: clamp(20px, 4vw, 56px);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--black);
+  color: var(--white);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--blue);
+  color: var(--white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* the logo is a black "s." on transparent; on this black site it's drawn white */
+.logo {
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin: -6px;
+  filter: invert(1);
+}
+
+/* --------------------------------------------------------------------------
+   Home: full-screen video, text in the corners
+   -------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-video,
+.hero-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* shown until videos/background.mp4 is uploaded (and behind it while it loads) */
+.hero-fallback {
+  background:
+    radial-gradient(60% 50% at 70% 40%, rgba(59, 130, 246, 0.22), transparent 70%),
+    radial-gradient(50% 40% at 20% 80%, rgba(255, 255, 255, 0.06), transparent 70%),
+    #050506;
+}
+
+/* keeps white text readable over any video */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0.75) 100%);
+  pointer-events: none;
+}
+
+.hero-top {
+  padding: 28px var(--gutter) 0;
+}
+
+.hero-middle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 40px;
+  padding: 48px var(--gutter);
+}
+
+.headline {
+  max-width: 11ch;
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.downloads {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  text-align: right;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 248px;
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 12px;
+  background: var(--white);
+  color: var(--black);
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.download:hover {
+  opacity: 0.88;
+}
+
+.download--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.download svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.downloads-note {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 24px;
+  padding: 0 var(--gutter) 32px;
+}
+
+.wordmark {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.legal-links {
+  display: flex;
+  gap: clamp(20px, 4vw, 56px);
+  padding-bottom: 8px;
+  list-style: none;
+}
+
+.legal-links a {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.legal-links a:hover {
+  color: var(--white);
+}
+
+@media (max-width: 820px) {
+  .hero-middle {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 36px;
+  }
+
+  .headline {
+    max-width: 12ch;
+  }
+
+  .downloads {
+    align-items: stretch;
+    text-align: left;
+  }
+
+  .download {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-bottom {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .legal-links {
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    padding-bottom: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Legal pages
+   -------------------------------------------------------------------------- */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px var(--gutter);
+}
+
+.page-header a {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.page-header a:hover {
+  color: var(--white);
+}
+
+.legal {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px var(--gutter) 96px;
+  line-height: 1.7;
+}
+
+.legal h1 {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.legal .updated {
+  margin: 12px 0 40px;
+  font-size: 14px;
+  color: var(--text-faint);
+}
+
+.legal h2 {
+  margin: 40px 0 12px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.legal p,
+.legal li {
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+.legal p + p {
+  margin-top: 14px;
+}
+
+.legal ul {
+  margin: 12px 0 0 20px;
+}
+
+.legal li + li {
+  margin-top: 8px;
+}
+
+.legal strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.legal a {
+  color: var(--blue);
+}
+
+.page-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px var(--gutter) 32px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.page-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+}

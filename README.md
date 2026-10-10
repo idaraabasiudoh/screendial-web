@@ -1,35 +1,12 @@
-# Screendial Coming Soon Web 🚀✨
+# Screendial website
 
-This is the interactive landing page and "Coming Soon" teaser website for **Screendial**—an intelligent, real-time native desktop copilot overlay.
+The landing page for Screendial, a Gropad Inc product. Static HTML and CSS, served by GitHub Pages.
 
----
+- `index.html`: home page, with download buttons for macOS and Windows
+- `privacy.html`, `terms-of-service.html`, `terms-of-use.html`: legal pages
+- `site.css`: styles for every page
+- `videos/background.mp4`: the home page background video (add it here)
 
-## 🎨 Features
-- **Interactive Screendial Simulator:** Experience Screendial's Command Palette, Floating Assistive Orb, visual element highlighting, and mouse-gliding automation directly inside the browser.
-- **Modern Liquid Glass Design:** Leverages backdrop blur, specular highlights, and vibrant neon gradients (`#FF334B`, `#00F0FF`, `#A855F7`) matching the native Tauri application design system.
-- **Waitlist Forms:** LocalStorage-persisted waitlist form with successful subscription animations.
-- **Fast and Self-Contained:** Designed using HTML5, Tailwind CSS Play CDN, and Lucide Icons for rapid loads and immediate deployment (Vercel, Netlify, or GitHub Pages) without any pre-compilation or heavy dependencies.
+Downloads link to the latest release of this repo. The app's build workflow publishes them as `Screendial.dmg` and `Screendial-Setup.exe`, so the links never change between versions.
 
----
-
-## 🚀 Local Setup & Preview
-
-You can open `index.html` directly in your browser, or run a fast local HTTP server:
-
-```bash
-# Python 3
-python3 -m http.server 3000
-
-# Node / npm
-npx serve .
-```
-
-Then visit [http://localhost:3000](http://localhost:3000).
-
----
-
-## 📦 Deployment
-Since this website is completely static, you can deploy it instantly with:
-- **GitHub Pages:** Just commit and push this directory as a repository root.
-- **Vercel:** Run `vercel` inside this directory.
-- **Netlify:** Drag & drop this folder into the Netlify Dashboard.
+Preview locally with `python3 -m http.server` and open http://localhost:8000.
