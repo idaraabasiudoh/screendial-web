@@ -49,6 +49,10 @@ if [ "$OS" = "Darwin" ]; then
         rm -rf "$DEST_APP"
     fi
 
+    echo "-> Resetting Screendial's screen and microphone permissions..."
+    tccutil reset ScreenCapture com.screendial.app >/dev/null 2>&1 || true
+    tccutil reset Microphone com.screendial.app >/dev/null 2>&1 || true
+
     echo "-> Mounting disk image..."
     hdiutil mount "$TEMP_DMG" -quiet
 
