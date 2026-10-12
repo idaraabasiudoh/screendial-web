@@ -176,8 +176,8 @@ a {
 }
 
 .wordmark {
-  font-size: clamp(32px, 4vw, 52px);
-  font-weight: 600;
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 800;
   letter-spacing: -0.03em;
   color: rgba(255, 255, 255, 0.82);
 }
