@@ -176,10 +176,10 @@ a {
 }
 
 .wordmark {
-  font-size: clamp(24px, 3vw, 38px);
-  font-weight: 800;
+  font-size: clamp(24px, 3vw, 8px);
+  font-weight: 500;
   letter-spacing: -0.03em;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255);
 }
 
 .legal-links {
