@@ -99,6 +99,41 @@ a {
 
 .hero-top {
   padding: 28px var(--gutter) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hero-auth {
+  display: flex;
+  gap: 10px;
+}
+
+.auth-button {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.auth-button:hover {
+  opacity: 0.88;
+}
+
+.auth-button--primary {
+  border-color: var(--white);
+  background: var(--white);
+  color: var(--black);
 }
 
 .hero-middle {

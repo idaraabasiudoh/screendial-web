@@ -3,30 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Screendial — Understand anything on your screen</title>
-  <meta name="description" content="Screendial looks at your screen, answers your questions, and guides you through any app. For macOS and Windows.">
+  <title>Screendial: Understand anything on your screen</title>
+  <meta name="description" content="Screendial is an AI desktop assistant that looks at your screen, answers your questions, and guides you step by step through any app. Available for macOS and Windows.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://screendial.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Screendial">
+  <meta property="og:title" content="Screendial: Understand anything on your screen">
+  <meta property="og:description" content="Screendial is an AI desktop assistant that looks at your screen, answers your questions, and guides you step by step through any app. Available for macOS and Windows.">
+  <meta property="og:url" content="https://screendial.com/">
+  <meta property="og:image" content="https://screendial.com/assets/social/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Screendial: Understand anything on your screen">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Screendial: Understand anything on your screen">
+  <meta name="twitter:description" content="Screendial is an AI desktop assistant that looks at your screen, answers your questions, and guides you step by step through any app. Available for macOS and Windows.">
+  <meta name="twitter:image" content="https://screendial.com/assets/social/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Screendial",
+        "url": "https://screendial.com/",
+        "description": "An AI desktop assistant that looks at your screen, answers your questions, and guides you step by step through any app.",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "macOS, Windows",
+        "image": "https://screendial.com/assets/social/og-image.png",
+        "publisher": { "@type": "Organization", "name": "Gropad Inc" }
+      },
+      {
+        "@type": "Organization",
+        "name": "Gropad Inc",
+        "url": "https://screendial.com/",
+        "logo": "https://screendial.com/assets/icons/web-app-manifest-512x512.png",
+        "email": "support@gropad.com"
+      }
+    ]
+  }
+  </script>
+
   <meta name="theme-color" content="#000000">
 
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>
   <main class="hero">
     <div class="hero-fallback" aria-hidden="true"></div>
     <!-- Background video: upload it as videos/background.mp4 (H.264, muted) -->
-    <video class="hero-video" src="videos/background.mp4" autoplay muted loop playsinline aria-hidden="true"
+    <video class="hero-video" src="/assets/videos/background.mp4" autoplay muted loop playsinline aria-hidden="true"
       onerror="this.remove()"></video>
 
     <header class="hero-top">
-      <a href="./" aria-label="Screendial home"><img class="logo" src="brand/logo.png" alt="Screendial"></a>
+      <a href="/" aria-label="Screendial home"><img class="logo" src="/assets/brand/logo.png" alt="Screendial"></a>
+      <nav class="hero-auth" aria-label="Account">
+        <a class="auth-button" href="/account/">Log in</a>
+        <a class="auth-button auth-button--primary" href="/account/?mode=signup">Sign up</a>
+      </nav>
     </header>
 
     <section class="hero-middle">
@@ -48,9 +94,9 @@
     <footer class="hero-bottom">
       <p class="wordmark">Screendial</p>
       <ul class="legal-links">
-        <li><a href="privacy.html">Privacy</a></li>
-        <li><a href="terms-of-service.html">Terms of Service</a></li>
-        <li><a href="terms-of-use.html">Terms of Use</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="/terms-of-service/">Terms of Service</a></li>
+        <li><a href="/terms-of-use/">Terms of Use</a></li>
       </ul>
     </footer>
   </main>

@@ -202,4 +202,6 @@ function render(session) {
   loadHistory(user.id);
 }
 
+if (new URLSearchParams(location.search).get("mode") === "signup") setMode("signup");
+
 supabase.auth.onAuthStateChange((_event, session) => render(session));
