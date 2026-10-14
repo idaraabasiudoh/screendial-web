@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Account — Screendial</title>
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../site.css">
+</head>
+<body>
+  <header class="page-header">
+    <a href="../" aria-label="Screendial home"><img class="logo" src="../brand/logo.png" alt="Screendial"></a>
+    <a href="../">Back to Screendial</a>
+  </header>
+
+  <main class="legal account">
+    <p class="account-loading" id="loading">Loading…</p>
+
+    <!-- Signed out -->
+    <section id="auth-view" hidden>
+      <h1 id="auth-title">Sign in</h1>
+      <p class="updated" id="auth-subtitle">Use the same email and password as the Screendial app.</p>
+
+      <form class="account-form" id="auth-form" novalidate>
+        <label>
+          <span>Email</span>
+          <input type="email" id="auth-email" autocomplete="email" required>
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" id="auth-password" autocomplete="current-password" required minlength="8">
+        </label>
+        <p class="account-error" id="auth-error" role="alert" hidden></p>
+        <p class="account-notice" id="auth-notice" role="status" hidden></p>
+        <button class="download" type="submit" id="auth-submit">Sign in</button>
+      </form>
+
+      <p class="account-switch">
+        <span id="auth-switch-text">New to Screendial?</span>
+        <button type="button" class="link-button" id="auth-switch">Create an account</button>
+      </p>
+    </section>
+
+    <!-- Signed in -->
+    <section id="account-view" hidden>
+      <div class="account-head">
+        <div>
+          <h1>Your account</h1>
+          <p class="updated" id="account-email"></p>
+        </div>
+        <button type="button" class="download download--secondary account-small" id="sign-out">Sign out</button>
+      </div>
+
+      <h2>History</h2>
+      <p class="account-muted" id="history-empty" hidden>No history yet. Questions you ask Screendial will show up here.</p>
+      <p class="account-error" id="history-error" role="alert" hidden></p>
+      <ol class="history" id="history"></ol>
+
+      <h2>Delete account</h2>
+      <p>This permanently deletes your Screendial account and all of its history. It can't be undone.</p>
+      <form class="account-form account-danger" id="delete-form" novalidate>
+        <label>
+          <span>Password</span>
+          <input type="password" id="delete-password" autocomplete="current-password" required>
+        </label>
+        <label>
+          <span>Type DELETE to confirm</span>
+          <input type="text" id="delete-confirm" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+        </label>
+        <p class="account-error" id="delete-error" role="alert" hidden></p>
+        <button class="download account-delete" type="submit" id="delete-submit" disabled>Delete my account</button>
+      </form>
+    </section>
+
+    <!-- After deletion -->
+    <section id="deleted-view" hidden>
+      <h1>Account deleted</h1>
+      <p class="updated">Your account and history have been permanently removed.</p>
+      <p><a href="../">Back to Screendial</a></p>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <span>&copy; 2026 Gropad Inc</span>
+    <nav>
+      <a href="../privacy.html">Privacy</a>
+      <a href="../terms-of-service.html">Terms of Service</a>
+      <a href="../terms-of-use.html">Terms of Use</a>
+    </nav>
+  </footer>
+
+  <script type="module" src="account.js"></script>
+</body>
+</html>
