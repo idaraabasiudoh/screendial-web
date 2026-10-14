@@ -1,6 +1,6 @@
 # Screendial website
 
-The landing page for Screendial, a Gropad Inc product. Static HTML and CSS, served by GitHub Pages.
+The landing page for Screendial, a Gropad Inc product. Static HTML and CSS, served by Vercel.
 
 - `index.html`: home page, with download buttons and Log in / Sign up
 - `account/`: sign in or up, view history, delete account (`assets/js/account.js`)
@@ -11,7 +11,7 @@ The landing page for Screendial, a Gropad Inc product. Static HTML and CSS, serv
 - `assets/videos/background.mp4`: the home page background video (add it here)
 - `sitemap.xml`, `robots.txt`, `site.webmanifest`, `favicon.ico`: stay at the root, where crawlers and browsers look for them
 
-Pages use root-relative paths (`/assets/...`), so the site must be served from the domain root (screendial.com).
+Pages use root-relative paths (`/assets/...`), so the site must be served from the domain root (www.screendial.com).
 
 Downloads link to the latest release of this repo. The app's build workflow publishes them as `Screendial.dmg` and `Screendial-Setup.exe`, so the links never change between versions.
 

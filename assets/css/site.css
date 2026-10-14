@@ -466,36 +466,15 @@ a {
   cursor: pointer;
 }
 
-.history {
-  display: grid;
-  gap: 16px;
-  margin-top: 8px;
-  list-style: none;
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
 }
 
-.history-session {
-  padding: 18px 20px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-}
-
-.legal .history-date {
-  font-size: 13px;
-  color: var(--text-faint);
-}
-
-.history-turn {
+.account .account-actions + .account-error {
   margin-top: 12px;
-}
-
-.legal .history-prompt {
-  color: var(--white);
-  font-weight: 500;
-}
-
-.legal .history-answer {
-  margin-top: 4px;
-  white-space: pre-wrap;
 }
 
 @media (max-width: 520px) {

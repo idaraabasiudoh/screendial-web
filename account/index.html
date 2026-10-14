@@ -4,24 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Your account | Screendial</title>
-  <meta name="description" content="Sign in to your Screendial account to see your conversation history or delete your account.">
+  <meta name="description" content="Sign in to your Screendial account to export your conversation history or delete your account.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://screendial.com/account/">
+  <link rel="canonical" href="https://www.screendial.com/account/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Screendial">
   <meta property="og:title" content="Your account | Screendial">
-  <meta property="og:description" content="Sign in to your Screendial account to see your conversation history or delete your account.">
-  <meta property="og:url" content="https://screendial.com/account/">
-  <meta property="og:image" content="https://screendial.com/assets/social/og-image.png">
+  <meta property="og:description" content="Sign in to your Screendial account to export your conversation history or delete your account.">
+  <meta property="og:url" content="https://www.screendial.com/account/">
+  <meta property="og:image" content="https://www.screendial.com/assets/social/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Screendial: Understand anything on your screen">
   <meta property="og:locale" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Your account | Screendial">
-  <meta name="twitter:description" content="Sign in to your Screendial account to see your conversation history or delete your account.">
-  <meta name="twitter:image" content="https://screendial.com/assets/social/og-image.png">
+  <meta name="twitter:description" content="Sign in to your Screendial account to export your conversation history or delete your account.">
+  <meta name="twitter:image" content="https://www.screendial.com/assets/social/og-image.png">
 
   <meta name="theme-color" content="#000000">
   <link rel="icon" type="image/png" href="/assets/icons/favicon-96x96.png" sizes="96x96">
@@ -79,9 +79,12 @@
       </div>
 
       <h2>History</h2>
-      <p class="account-muted" id="history-empty" hidden>No history yet. Questions you ask Screendial will show up here.</p>
+      <p>Download everything you've asked Screendial and its answers.</p>
+      <div class="account-actions">
+        <button type="button" class="download download--secondary account-small" id="export-json">Export as JSON</button>
+        <button type="button" class="download download--secondary account-small" id="export-text">Export as text</button>
+      </div>
       <p class="account-error" id="history-error" role="alert" hidden></p>
-      <ol class="history" id="history"></ol>
 
       <h2>Delete account</h2>
       <p>This permanently deletes your Screendial account and all of its history. It can't be undone.</p>
