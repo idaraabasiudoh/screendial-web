@@ -160,6 +160,11 @@ a {
   text-align: right;
 }
 
+/* The hidden attribute must win over display rules like .download's inline-flex. */
+[hidden] {
+  display: none !important;
+}
+
 .download {
   display: inline-flex;
   align-items: center;
