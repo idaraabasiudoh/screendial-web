@@ -3,7 +3,7 @@
 The landing page for Screendial, a Gropad Inc product. Screendial guides users through apps on their screen; it never clicks or types for them, so site copy must never describe automation or cursor control. Static HTML and CSS, served by Vercel.
 
 - `index.html`: home page, with download buttons and Log in / Sign up
-- `account/`: sign in or up, view history, delete account (`assets/js/account.js`)
+- `account/`: sign in or up, see your plan and usage, upgrade or manage the Stripe subscription, export history, delete account (`assets/js/account.js`)
 - `privacy/`, `terms-of-service/`, `terms-of-use/`: legal pages. The old `*.html` files at the root only redirect to these.
 - `assets/css/site.css`: styles for every page
 - `assets/brand/`, `assets/icons/`: logo, favicons and app icons

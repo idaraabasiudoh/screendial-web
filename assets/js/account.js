@@ -1,4 +1,4 @@
-// Screendial account page: sign in or up, see your history, delete your account.
+// Screendial account page: sign in or up, manage your plan, export your history, delete your account.
 // The anon key is public by design; every read is limited to the signed-in user by
 // row-level security, and deletion goes through the delete-account edge function.
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
@@ -167,6 +167,79 @@ $("export-json").addEventListener("click", () => exportHistory("json"));
 $("export-text").addEventListener("click", () => exportHistory("text"));
 
 // ---------------------------------------------------------------------------
+// Plan: this month's usage, and Stripe Checkout / customer portal through the billing function
+// ---------------------------------------------------------------------------
+
+const longDate = new Intl.DateTimeFormat(undefined, { dateStyle: "long" });
+
+async function loadPlan() {
+  message("plan-error");
+  const { data, error } = await supabase.rpc("get_my_usage");
+  const plan = data?.[0];
+  if (error || !plan) {
+    $("plan-summary").textContent = "";
+    return message("plan-error", "Couldn't load your plan. Please refresh the page.");
+  }
+
+  const subscribed = plan.status === "active" || plan.status === "trialing";
+  let summary = `You're on the ${plan.plan_name} plan.`;
+  if (subscribed && plan.current_period_end) {
+    const date = longDate.format(new Date(plan.current_period_end));
+    summary += plan.cancel_at_period_end ? ` It ends on ${date}.` : ` It renews on ${date}.`;
+  } else if (plan.status === "past_due" || plan.status === "unpaid") {
+    summary += " Your last payment didn't go through; update your payment method to keep Pro.";
+  }
+  $("plan-summary").textContent = summary;
+  $("plan-usage").textContent = `${plan.used_this_month} of ${plan.monthly_queries} questions used this month. The count resets on the 1st.`;
+  $("plan-usage").hidden = false;
+
+  $("plan-upgrade").hidden = subscribed;
+  // only school email addresses can buy the student plan; the billing function checks again
+  $("plan-student").hidden = subscribed || !plan.student_eligible;
+  // anyone who has been through checkout has a Stripe customer, and the portal shows invoices
+  $("plan-manage").hidden = !plan.status;
+}
+
+async function openBilling(action, plan) {
+  message("plan-error");
+  const buttons = [$("plan-upgrade"), $("plan-student"), $("plan-manage")];
+  buttons.forEach((button) => (button.disabled = true));
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error("Your session has ended. Please sign in again.");
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/billing`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ action, plan }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.url) throw new Error(result.error || "Couldn't open billing. Please try again.");
+    location.assign(result.url);
+  } catch (err) {
+    message("plan-error", err.message);
+    buttons.forEach((button) => (button.disabled = false));
+  }
+}
+
+$("plan-upgrade").addEventListener("click", () => openBilling("checkout", "pro"));
+$("plan-student").addEventListener("click", () => openBilling("checkout", "student"));
+$("plan-manage").addEventListener("click", () => openBilling("portal"));
+
+// Back from Stripe Checkout: say what happened, then drop the query so a refresh doesn't repeat it.
+const checkout = new URLSearchParams(location.search).get("checkout");
+if (checkout === "success") {
+  message("plan-notice", "Thanks for subscribing! Your plan updates within a minute.");
+  // the webhook usually lands within seconds; show the new plan without a manual refresh
+  setTimeout(() => shownUser && loadPlan(), 5000);
+}
+if (checkout === "cancelled") message("plan-notice", "Checkout was cancelled. You haven't been charged.");
+if (checkout) history.replaceState(null, "", location.pathname);
+
+// ---------------------------------------------------------------------------
 // Delete account
 // ---------------------------------------------------------------------------
 
@@ -228,6 +301,7 @@ function render(session) {
   $("delete-form").reset();
   updateDeleteButton();
   show("account-view");
+  loadPlan();
 }
 
 if (new URLSearchParams(location.search).get("mode") === "signup") setMode("signup");
