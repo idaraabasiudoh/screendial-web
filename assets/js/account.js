@@ -181,6 +181,15 @@ async function loadPlan() {
     return message("plan-error", "Couldn't load your plan. Please refresh the page.");
   }
 
+  // Organization members (e.g. @gropad.com) are unlimited and have nothing to buy or manage.
+  if (plan.organization) {
+    $("plan-summary").textContent = `You're covered by your organization, ${plan.organization}. Screendial is unlimited for you.`;
+    $("plan-usage").textContent = `${plan.used_this_month} questions asked this month.`;
+    $("plan-usage").hidden = false;
+    for (const id of ["plan-upgrade", "plan-student", "plan-manage"]) $(id).hidden = true;
+    return;
+  }
+
   const subscribed = plan.status === "active" || plan.status === "trialing";
   let summary = `You're on the ${plan.plan_name} plan.`;
   if (subscribed && plan.current_period_end) {
