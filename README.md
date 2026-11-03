@@ -1,6 +1,6 @@
 # Screendial website
 
-The landing page for Screendial, a Gropad Inc product. Static HTML and CSS, served by Vercel.
+The landing page for Screendial, a Gropad Inc product. Screendial guides users through apps on their screen; it never clicks or types for them, so site copy must never describe automation or cursor control. Static HTML and CSS, served by Vercel.
 
 - `index.html`: home page, with download buttons and Log in / Sign up
 - `account/`: sign in or up, view history, delete account (`assets/js/account.js`)
