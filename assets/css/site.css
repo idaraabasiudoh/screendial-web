@@ -427,6 +427,38 @@ a {
   cursor: pointer;
 }
 
+.account-google {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 8px;
+  gap: 10px;
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.account-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 400px;
+  margin: 16px 0 0;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.account-divider::before,
+.account-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+
+.account-code code {
+  font-size: 13px;
+  word-break: break-all;
+}
+
 .account .download:disabled {
   opacity: 0.4;
   cursor: default;

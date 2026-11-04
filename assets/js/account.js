@@ -1,4 +1,4 @@
-// Screendial account page: sign in or up, manage your plan, export your history, delete your account.
+// Screendial account page: sign in or up (also for the app), manage your plan, export your history, delete your account.
 // The anon key is public by design; every read is limited to the signed-in user by
 // row-level security, and deletion goes through the delete-account edge function.
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
@@ -14,7 +14,7 @@ let mode = "signin";
 
 function show(view) {
   $("loading").hidden = true;
-  for (const id of ["auth-view", "account-view", "deleted-view"]) $(id).hidden = id !== view;
+  for (const id of ["auth-view", "app-view", "account-view", "deleted-view"]) $(id).hidden = id !== view;
 }
 
 function message(id, text) {
@@ -26,13 +26,21 @@ function message(id, text) {
 // Sign in / sign up
 // ---------------------------------------------------------------------------
 
+// The Screendial app signs in here: it opens /account/?app=<challenge>, where the challenge is
+// base64url(sha256(verifier)) and the verifier stays in the app. Once signed in, "Open Screendial"
+// asks the app-auth function for a one-time code bound to that challenge and hands it to the app.
+const APP_CHALLENGE = (() => {
+  const challenge = new URLSearchParams(location.search).get("app");
+  return challenge && /^[A-Za-z0-9_-]{43}$/.test(challenge) ? challenge : null;
+})();
+
 function setMode(next) {
   mode = next;
   const signup = mode === "signup";
-  $("auth-title").textContent = signup ? "Create your account" : "Sign in";
+  $("auth-title").textContent = signup ? "Create your account" : APP_CHALLENGE ? "Sign in to Screendial" : "Sign in";
   $("auth-subtitle").textContent = signup
     ? "You'll use this account to sign in to the Screendial app."
-    : "Use the same email and password as the Screendial app.";
+    : "Sign in with Google, or with your email and password.";
   $("auth-submit").textContent = signup ? "Create account" : "Sign in";
   $("auth-switch-text").textContent = signup ? "Already have an account?" : "New to Screendial?";
   $("auth-switch").textContent = signup ? "Sign in" : "Create an account";
@@ -60,7 +68,8 @@ $("auth-form").addEventListener("submit", async (event) => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${location.origin}/account/` },
+        // keeps ?app=, so confirming the email continues the app sign-in
+        options: { emailRedirectTo: `${location.origin}/account/${location.search}` },
       });
       if (error) throw error;
       if (!data.session) message("auth-notice", "Check your email to confirm your account, then sign in.");
@@ -75,7 +84,52 @@ $("auth-form").addEventListener("submit", async (event) => {
   }
 });
 
+$("auth-google").addEventListener("click", async () => {
+  message("auth-error");
+  // Google sends the browser back to this same URL, ?app= included.
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: `${location.origin}/account/${location.search}` },
+  });
+  if (error) message("auth-error", error.message || "Could not start Google sign-in.");
+});
+
 $("sign-out").addEventListener("click", () => supabase.auth.signOut());
+
+// ---------------------------------------------------------------------------
+// Hand this sign-in to the Screendial app
+// ---------------------------------------------------------------------------
+
+$("app-continue").addEventListener("click", async () => {
+  message("app-error");
+  const button = $("app-continue");
+  button.disabled = true;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error("Your session has ended. Please sign in again.");
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/app-auth`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ action: "issue", challenge: APP_CHALLENGE }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.code) throw new Error(result.error || "Could not sign in to the app.");
+    $("app-code").textContent = result.code;
+    $("app-done").hidden = false;
+    location.href = `screendial://auth/callback?code=${encodeURIComponent(result.code)}`;
+  } catch (err) {
+    message("app-error", err.message);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("app-copy").addEventListener("click", () => navigator.clipboard?.writeText($("app-code").textContent));
+$("app-switch").addEventListener("click", () => supabase.auth.signOut());
 
 // ---------------------------------------------------------------------------
 // History export: download every conversation as JSON or plain text
@@ -252,8 +306,11 @@ if (checkout) history.replaceState(null, "", location.pathname);
 // Delete account
 // ---------------------------------------------------------------------------
 
+// Accounts made with Google have no password; delete-account checks for a recent sign-in instead.
+let hasPassword = true;
+
 function updateDeleteButton() {
-  $("delete-submit").disabled = !($("delete-password").value && $("delete-confirm").value === "DELETE");
+  $("delete-submit").disabled = !((!hasPassword || $("delete-password").value) && $("delete-confirm").value === "DELETE");
 }
 $("delete-password").addEventListener("input", updateDeleteButton);
 $("delete-confirm").addEventListener("input", updateDeleteButton);
@@ -274,7 +331,7 @@ $("delete-form").addEventListener("submit", async (event) => {
         apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify({ password: $("delete-password").value, confirm: $("delete-confirm").value }),
+      body: JSON.stringify({ password: hasPassword ? $("delete-password").value : undefined, confirm: $("delete-confirm").value }),
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok || !result.deleted) throw new Error(result.error || "Could not delete the account.");
@@ -306,7 +363,17 @@ function render(session) {
   }
   if (shownUser === user.id) return;
   shownUser = user.id;
+  if (APP_CHALLENGE) {
+    $("app-email").textContent = `Signed in as ${user.email ?? "your account"}`;
+    $("app-done").hidden = true;
+    message("app-error");
+    show("app-view");
+    return;
+  }
   $("account-email").textContent = user.email ?? "";
+  hasPassword = (user.identities ?? []).some((identity) => identity.provider === "email");
+  $("delete-password-field").hidden = !hasPassword;
+  $("delete-recent").hidden = hasPassword;
   $("delete-form").reset();
   updateDeleteButton();
   show("account-view");
@@ -314,5 +381,6 @@ function render(session) {
 }
 
 if (new URLSearchParams(location.search).get("mode") === "signup") setMode("signup");
+else if (APP_CHALLENGE) setMode("signin");
 
 supabase.auth.onAuthStateChange((_event, session) => render(session));
