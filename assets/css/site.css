@@ -373,9 +373,57 @@ a {
    Account
    -------------------------------------------------------------------------- */
 
-.account-loading,
-.account-muted {
-  font-size: 16px;
+/* Scale: 13 small, 14 secondary, 15 body, 18 section, 28-32 title. Spacing steps: 8, 16, 24, 40.
+   Controls are 44px tall (40px when small) and inputs stay 16px so iOS doesn't zoom on focus. */
+
+body:has(.account) {
+  display: flex;
+  flex-direction: column;
+}
+
+.legal.account {
+  flex: 1;
+  width: 100%;
+  max-width: calc(640px + 2 * var(--gutter));
+  padding-top: clamp(8px, 3vw, 32px);
+  padding-bottom: clamp(48px, 8vw, 80px);
+  line-height: 1.5;
+}
+
+.account section:not(#account-view) {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.legal.account h1 {
+  font-size: clamp(28px, 4vw, 32px);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.legal.account .updated {
+  margin: 8px 0 24px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.legal.account h2 {
+  margin: 40px 0 8px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 18px;
+}
+
+.legal.account p,
+.legal.account li {
+  font-size: 15px;
+}
+
+.legal.account p + p {
+  margin-top: 8px;
+}
+
+.legal.account .account-loading {
   color: var(--text-faint);
 }
 
@@ -383,31 +431,62 @@ a {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
+  gap: 16px;
+}
+
+.account-head .updated {
+  margin-bottom: 0;
+}
+
+.account .download {
+  width: auto;
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.account .download:not(.download--secondary) {
+  border: 0;
+}
+
+.account .download:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.account .account-small {
+  height: 40px;
+  font-size: 14px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .account-form {
   display: grid;
   gap: 16px;
-  max-width: 400px;
-  margin-top: 8px;
 }
 
 .account-form label {
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 
 .account-form label span {
   font-size: 14px;
+  font-weight: 500;
   color: var(--text-dim);
 }
 
 .account-form input {
-  height: 48px;
-  padding: 0 14px;
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.06);
   color: var(--white);
   font: inherit;
@@ -419,43 +498,55 @@ a {
   border-color: var(--blue);
 }
 
-.account-form .download {
+.account .account-form .download,
+.account .account-google {
   width: 100%;
-  min-width: 0;
-  border: 0;
-  font-family: inherit;
-  cursor: pointer;
 }
 
-.account-links {
+.account-form .download {
+  margin-top: 8px;
+}
+
+.legal.account .account-links {
   margin: 8px 0 0;
-  padding: 0;
   list-style: none;
 }
 
-.account-links li {
-  padding: 12px 0;
+.legal.account .account-links li {
+  margin: 0;
+}
+
+.account-links li + li {
   border-top: 1px solid var(--line);
 }
 
-.account-google {
-  width: 100%;
-  max-width: 400px;
-  margin-top: 8px;
-  gap: 10px;
-  border: 0;
-  font-family: inherit;
-  cursor: pointer;
+.legal.account .account-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  color: var(--white);
+  font-size: 15px;
+  text-decoration: none;
 }
 
-.account-divider {
+.account-links a::after {
+  content: "\203A";
+  font-size: 20px;
+  color: var(--text-faint);
+}
+
+.account-links a:hover {
+  opacity: 0.75;
+}
+
+.legal.account .account-divider {
   display: flex;
   align-items: center;
   gap: 12px;
-  max-width: 400px;
-  margin: 16px 0 0;
+  margin: 16px 0;
   font-size: 13px;
-  color: var(--text-dim);
+  color: var(--text-faint);
 }
 
 .account-divider::before,
@@ -470,39 +561,41 @@ a {
   word-break: break-all;
 }
 
-.account .download:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-.account-small {
-  min-width: 0;
-  height: 40px;
-  padding: 0 16px;
-  font-family: inherit;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.account-delete {
+.account .account-delete {
   background: #ef4444;
   color: var(--white);
 }
 
-.account .account-error {
+.legal.account .account-error {
   font-size: 14px;
   color: #f87171;
 }
 
-.account .account-notice {
+.legal.account .account-notice {
   font-size: 14px;
   color: var(--blue);
 }
 
-.account-switch {
+#verify-banner {
   margin-top: 24px;
-  font-size: 15px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.legal.account .account-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 14px;
   color: var(--text-dim);
+}
+
+.legal.account .account-switch + .account-switch {
+  margin-top: 8px;
 }
 
 .link-button {
@@ -517,17 +610,22 @@ a {
 .account-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   margin-top: 16px;
 }
 
-.account .account-actions + .account-error {
-  margin-top: 12px;
+.legal.account .account-actions + .account-error,
+.legal.account #app-done,
+.legal.account #start-error {
+  margin-top: 16px;
 }
 
 @media (max-width: 520px) {
-  .account-head {
+  .account-actions .download {
+    flex: 1 1 100%;
+  }
+
+  .page-footer {
     flex-direction: column;
-    gap: 0;
   }
 }
