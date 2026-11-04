@@ -306,6 +306,22 @@ async function loadPlan() {
   $("plan-student").hidden = subscribed || !plan.student_eligible || !emailConfirmed;
   // anyone who has been through checkout has a Stripe customer, and the portal shows invoices
   $("plan-manage").hidden = !plan.status;
+  // Receipts follow an email change; a failure here shouldn't get in the way of the page.
+  if (plan.status) syncBillingEmail().catch(() => {});
+}
+
+async function syncBillingEmail() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return;
+  await fetch(`${SUPABASE_URL}/functions/v1/billing`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({ action: "sync_email" }),
+  });
 }
 
 async function openBilling(action, plan) {
