@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sign-in and security | Screendial</title>
+  <meta name="description" content="Sign in to your Screendial account to manage your plan, history and security.">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://www.screendial.com/account/security/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Screendial">
+  <meta property="og:title" content="Sign-in and security | Screendial">
+  <meta property="og:description" content="Sign in to your Screendial account to manage your plan, history and security.">
+  <meta property="og:url" content="https://www.screendial.com/account/security/">
+  <meta property="og:image" content="https://www.screendial.com/assets/social/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Screendial: Understand anything on your screen">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sign-in and security | Screendial">
+  <meta name="twitter:description" content="Sign in to your Screendial account to manage your plan, history and security.">
+  <meta name="twitter:image" content="https://www.screendial.com/assets/social/og-image.png">
+
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" href="/assets/icons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+  <header class="page-header">
+    <a href="/" aria-label="Screendial home"><img class="logo" src="/assets/brand/logo.png" alt="Screendial"></a>
+    <a href="/account/">Back to your account</a>
+  </header>
+
+  <main class="legal account">
+    <p class="account-loading" id="loading">Loading…</p>
+
+    <section id="menu-view" hidden>
+      <h1>Sign-in and security</h1>
+      <p class="updated" id="current-email"></p>
+      <p id="google-note" hidden>You sign in with Google, so your email address and password are managed by your Google account.</p>
+      <div id="change-buttons" class="account-actions" hidden>
+        <button type="button" class="download download--secondary account-small" id="change-email">Change email</button>
+        <button type="button" class="download download--secondary account-small" id="change-password">Change password</button>
+      </div>
+      <p class="account-notice" id="menu-notice" role="status" hidden></p>
+    </section>
+
+    <!-- Step 1: prove it's you -->
+    <section id="code-view" hidden>
+      <h1>Confirm it's you</h1>
+      <p class="updated" id="code-sent"></p>
+      <form class="account-form" id="code-form" novalidate>
+        <label>
+          <span>Code</span>
+          <input type="text" id="code" inputmode="numeric" autocomplete="one-time-code" required>
+        </label>
+        <p class="account-error" id="code-error" role="alert" hidden></p>
+        <button class="download" type="submit" id="code-submit">Continue</button>
+      </form>
+      <p class="account-switch">
+        <button type="button" class="link-button" id="code-resend">Send a new code</button>
+        &nbsp;·&nbsp;
+        <button type="button" class="link-button" id="code-cancel">Cancel</button>
+      </p>
+    </section>
+
+    <!-- Step 2: the new value -->
+    <section id="email-view" hidden>
+      <h1>Change email</h1>
+      <form class="account-form" id="email-form" novalidate>
+        <label>
+          <span>New email address</span>
+          <input type="email" id="new-email" autocomplete="email" required>
+        </label>
+        <p class="account-error" id="email-error" role="alert" hidden></p>
+        <button class="download" type="submit" id="email-submit">Change email</button>
+      </form>
+    </section>
+
+    <section id="password-view" hidden>
+      <h1>Change password</h1>
+      <form class="account-form" id="password-form" novalidate>
+        <label>
+          <span>New password</span>
+          <input type="password" id="new-password" autocomplete="new-password" required minlength="8">
+        </label>
+        <p class="account-error" id="password-error" role="alert" hidden></p>
+        <button class="download" type="submit" id="password-submit">Save new password</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <span>&copy; 2026 Gropad Inc</span>
+    <nav>
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms-of-service/">Terms of Service</a>
+      <a href="/terms-of-use/">Terms of Use</a>
+    </nav>
+  </footer>
+
+  <script type="module" src="/assets/js/account-security.js"></script>
+</body>
+</html>

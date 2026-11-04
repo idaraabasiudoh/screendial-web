@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Your account | Screendial</title>
-  <meta name="description" content="Sign in to your Screendial account to export your conversation history or delete your account.">
+  <meta name="description" content="Sign in to your Screendial account to manage your plan, history and security.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.screendial.com/account/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Screendial">
   <meta property="og:title" content="Your account | Screendial">
-  <meta property="og:description" content="Sign in to your Screendial account to export your conversation history or delete your account.">
+  <meta property="og:description" content="Sign in to your Screendial account to manage your plan, history and security.">
   <meta property="og:url" content="https://www.screendial.com/account/">
   <meta property="og:image" content="https://www.screendial.com/assets/social/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -20,7 +20,7 @@
   <meta property="og:locale" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Your account | Screendial">
-  <meta name="twitter:description" content="Sign in to your Screendial account to export your conversation history or delete your account.">
+  <meta name="twitter:description" content="Sign in to your Screendial account to manage your plan, history and security.">
   <meta name="twitter:image" content="https://www.screendial.com/assets/social/og-image.png">
 
   <meta name="theme-color" content="#000000">
@@ -146,56 +146,11 @@
       </div>
       <p class="account-error" id="history-error" role="alert" hidden></p>
 
-      <h2>Sign-in and security</h2>
-      <p class="updated" id="security-google" hidden>You sign in with Google, so your email address and password are managed by your Google account.</p>
-      <div id="security-password">
-        <form class="account-form" id="email-form" novalidate>
-          <label>
-            <span>Change email address</span>
-            <input type="email" id="new-email" autocomplete="email" required>
-          </label>
-          <p class="account-error" id="email-error" role="alert" hidden></p>
-          <p class="account-notice" id="email-notice" role="status" hidden></p>
-          <button class="download download--secondary account-small" type="submit" id="email-submit">Change email</button>
-        </form>
-        <form class="account-form" id="password-form" novalidate>
-          <label>
-            <span>New password</span>
-            <input type="password" id="new-password" autocomplete="new-password" required minlength="8">
-          </label>
-          <label id="password-code-field" hidden>
-            <span>Code we emailed you</span>
-            <input type="text" id="password-code" inputmode="numeric" autocomplete="one-time-code">
-          </label>
-          <p class="account-error" id="password-error" role="alert" hidden></p>
-          <p class="account-notice" id="password-notice" role="status" hidden></p>
-          <button class="download download--secondary account-small" type="submit" id="password-submit">Email me a code</button>
-        </form>
-      </div>
-
-      <h2>Delete account</h2>
-      <p>This permanently deletes your Screendial account and all of its history. It can't be undone.</p>
-      <form class="account-form account-danger" id="delete-form" novalidate>
-        <button type="button" class="download download--secondary account-small" id="delete-send-code">Email me a code</button>
-        <p class="account-notice" id="delete-notice" role="status" hidden></p>
-        <label>
-          <span>Code we emailed you</span>
-          <input type="text" id="delete-code" inputmode="numeric" autocomplete="one-time-code" required>
-        </label>
-        <label>
-          <span>Type DELETE to confirm</span>
-          <input type="text" id="delete-confirm" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
-        </label>
-        <p class="account-error" id="delete-error" role="alert" hidden></p>
-        <button class="download account-delete" type="submit" id="delete-submit" disabled>Delete my account</button>
-      </form>
-    </section>
-
-    <!-- After deletion -->
-    <section id="deleted-view" hidden>
-      <h1>Account deleted</h1>
-      <p class="updated">Your account and history have been permanently removed.</p>
-      <p><a href="/">Back to Screendial</a></p>
+      <h2>Settings</h2>
+      <ul class="account-links">
+        <li><a href="/account/security/">Sign-in and security</a></li>
+        <li><a href="/account/delete/">Delete account</a></li>
+      </ul>
     </section>
   </main>
 

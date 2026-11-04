@@ -427,8 +427,15 @@ a {
   cursor: pointer;
 }
 
-#password-form {
-  margin-top: 24px;
+.account-links {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.account-links li {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
 }
 
 .account-google {
