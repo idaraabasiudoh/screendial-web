@@ -68,16 +68,36 @@
         <button class="download" type="submit" id="auth-submit">Sign in</button>
       </form>
 
+      <p class="account-switch" id="auth-links">
+        <button type="button" class="link-button" id="auth-forgot">Forgot your password?</button>
+        <button type="button" class="link-button" id="auth-resend" hidden>Resend confirmation email</button>
+      </p>
+
       <p class="account-switch">
         <span id="auth-switch-text">New to Screendial?</span>
         <button type="button" class="link-button" id="auth-switch">Create an account</button>
       </p>
     </section>
 
+    <!-- Arrived from a password reset email -->
+    <section id="reset-view" hidden>
+      <h1>Choose a new password</h1>
+      <p class="updated">You'll use it to sign in from now on.</p>
+      <form class="account-form" id="reset-form" novalidate>
+        <label>
+          <span>New password</span>
+          <input type="password" id="reset-password" autocomplete="new-password" required minlength="8">
+        </label>
+        <p class="account-error" id="reset-error" role="alert" hidden></p>
+        <button class="download" type="submit" id="reset-submit">Save new password</button>
+      </form>
+    </section>
+
     <!-- Signed in, and the Screendial app asked for this sign-in (?app=<challenge>) -->
     <section id="app-view" hidden>
       <h1>Sign in to the Screendial app</h1>
       <p class="updated" id="app-email"></p>
+      <p class="account-notice" id="app-unconfirmed" hidden>Confirm your email address first: open the link we sent you, then come back to this page.</p>
       <p>Only continue if you just chose to sign in from the Screendial app on this computer.</p>
       <div class="account-actions">
         <button type="button" class="download account-small" id="app-continue">Open Screendial</button>
@@ -102,6 +122,11 @@
         <button type="button" class="download download--secondary account-small" id="sign-out">Sign out</button>
       </div>
 
+      <div id="verify-banner" hidden>
+        <p class="account-notice" role="status">Confirm your email address to ask Screendial questions and subscribe to a plan.</p>
+        <button type="button" class="link-button" id="verify-resend">Resend confirmation email</button>
+      </div>
+
       <h2>Plan</h2>
       <p id="plan-summary">Loading your plan…</p>
       <p class="updated" id="plan-usage" hidden></p>
@@ -121,14 +146,42 @@
       </div>
       <p class="account-error" id="history-error" role="alert" hidden></p>
 
+      <h2>Sign-in and security</h2>
+      <p class="updated" id="security-google" hidden>You sign in with Google, so your email address and password are managed by your Google account.</p>
+      <div id="security-password">
+        <form class="account-form" id="email-form" novalidate>
+          <label>
+            <span>Change email address</span>
+            <input type="email" id="new-email" autocomplete="email" required>
+          </label>
+          <p class="account-error" id="email-error" role="alert" hidden></p>
+          <p class="account-notice" id="email-notice" role="status" hidden></p>
+          <button class="download download--secondary account-small" type="submit" id="email-submit">Change email</button>
+        </form>
+        <form class="account-form" id="password-form" novalidate>
+          <label>
+            <span>New password</span>
+            <input type="password" id="new-password" autocomplete="new-password" required minlength="8">
+          </label>
+          <label id="password-code-field" hidden>
+            <span>Code we emailed you</span>
+            <input type="text" id="password-code" inputmode="numeric" autocomplete="one-time-code">
+          </label>
+          <p class="account-error" id="password-error" role="alert" hidden></p>
+          <p class="account-notice" id="password-notice" role="status" hidden></p>
+          <button class="download download--secondary account-small" type="submit" id="password-submit">Email me a code</button>
+        </form>
+      </div>
+
       <h2>Delete account</h2>
       <p>This permanently deletes your Screendial account and all of its history. It can't be undone.</p>
       <form class="account-form account-danger" id="delete-form" novalidate>
-        <label id="delete-password-field">
-          <span>Password</span>
-          <input type="password" id="delete-password" autocomplete="current-password" required>
+        <button type="button" class="download download--secondary account-small" id="delete-send-code">Email me a code</button>
+        <p class="account-notice" id="delete-notice" role="status" hidden></p>
+        <label>
+          <span>Code we emailed you</span>
+          <input type="text" id="delete-code" inputmode="numeric" autocomplete="one-time-code" required>
         </label>
-        <p class="updated" id="delete-recent" hidden>You signed in with Google, so instead of a password we check that you signed in within the last 10 minutes. If it's been longer, sign out and back in first.</p>
         <label>
           <span>Type DELETE to confirm</span>
           <input type="text" id="delete-confirm" autocomplete="off" autocapitalize="characters" spellcheck="false" required>

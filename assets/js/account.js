@@ -9,12 +9,14 @@ const SUPABASE_ANON_KEY =
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (id) => document.getElementById(id);
+// A password reset link lands here with this in the URL; supabase-js clears it once it has read it.
+let recovering = location.hash.includes("type=recovery");
 
 let mode = "signin";
 
 function show(view) {
   $("loading").hidden = true;
-  for (const id of ["auth-view", "app-view", "account-view", "deleted-view"]) $(id).hidden = id !== view;
+  for (const id of ["auth-view", "reset-view", "app-view", "account-view", "deleted-view"]) $(id).hidden = id !== view;
 }
 
 function message(id, text) {
@@ -72,16 +74,57 @@ $("auth-form").addEventListener("submit", async (event) => {
         options: { emailRedirectTo: `${location.origin}/account/${location.search}` },
       });
       if (error) throw error;
-      if (!data.session) message("auth-notice", "Check your email to confirm your account, then sign in.");
+      if (!data.session) {
+        message("auth-notice", "Check your email to confirm your account, then sign in.");
+        $("auth-resend").hidden = false;
+      }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
     }
   } catch (err) {
+    if (err.code === "email_not_confirmed") $("auth-resend").hidden = false;
     message("auth-error", err.message || "Something went wrong. Please try again.");
   } finally {
     button.disabled = false;
   }
+});
+
+const returnUrl = `${location.origin}/account/${location.search}`;
+
+async function resendConfirmation(email, showResult) {
+  const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: returnUrl } });
+  showResult(error ? error.message : "Confirmation email sent. Check your inbox.");
+}
+
+$("auth-resend").addEventListener("click", () => {
+  message("auth-error");
+  resendConfirmation($("auth-email").value.trim(), (text) => message("auth-notice", text));
+});
+
+$("auth-forgot").addEventListener("click", async () => {
+  message("auth-error");
+  message("auth-notice");
+  const email = $("auth-email").value.trim();
+  if (!email.includes("@")) return message("auth-error", "Enter your email address above first.");
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: returnUrl });
+  if (error) return message("auth-error", error.message);
+  message("auth-notice", "If that address has an account, a password reset link is on its way.");
+});
+
+$("reset-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  message("reset-error");
+  const password = $("reset-password").value;
+  if (password.length < 8) return message("reset-error", "Password must be at least 8 characters long.");
+  $("reset-submit").disabled = true;
+  const { data: { session } } = await supabase.auth.getSession();
+  const { error } = await supabase.auth.updateUser({ password });
+  $("reset-submit").disabled = false;
+  if (error) return message("reset-error", error.message);
+  recovering = false;
+  shownUser = null;
+  render(session);
 });
 
 $("auth-google").addEventListener("click", async () => {
@@ -107,6 +150,7 @@ $("app-continue").addEventListener("click", async () => {
   try {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error("Your session has ended. Please sign in again.");
+    if (!session.user.email_confirmed_at) throw new Error("Please confirm your email address first.");
     const response = await fetch(`${SUPABASE_URL}/functions/v1/app-auth`, {
       method: "POST",
       headers: {
@@ -256,9 +300,10 @@ async function loadPlan() {
   $("plan-usage").textContent = `${plan.used_this_month} of ${plan.monthly_queries} questions used this month. The count resets on the 1st.`;
   $("plan-usage").hidden = false;
 
-  $("plan-upgrade").hidden = subscribed;
+  // subscribing needs a confirmed email address; the billing function checks again
+  $("plan-upgrade").hidden = subscribed || !emailConfirmed;
   // only school email addresses can buy the student plan; the billing function checks again
-  $("plan-student").hidden = subscribed || !plan.student_eligible;
+  $("plan-student").hidden = subscribed || !plan.student_eligible || !emailConfirmed;
   // anyone who has been through checkout has a Stripe customer, and the portal shows invoices
   $("plan-manage").hidden = !plan.status;
 }
@@ -303,17 +348,78 @@ if (checkout === "cancelled") message("plan-notice", "Checkout was cancelled. Yo
 if (checkout) history.replaceState(null, "", location.pathname);
 
 // ---------------------------------------------------------------------------
+// Sign-in and security: change email or password (accounts with a password only)
+// ---------------------------------------------------------------------------
+
+$("verify-resend").addEventListener("click", () => {
+  resendConfirmation($("account-email").textContent, (text) => ($("verify-resend").textContent = text));
+});
+
+$("email-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  message("email-error");
+  message("email-notice");
+  const email = $("new-email").value.trim();
+  if (!email.includes("@")) return message("email-error", "Please enter a valid email address.");
+  $("email-submit").disabled = true;
+  const { error } = await supabase.auth.updateUser({ email }, { emailRedirectTo: returnUrl });
+  $("email-submit").disabled = false;
+  if (error) return message("email-error", error.message);
+  message("email-notice", "Confirm the change from the links we sent to your current and new addresses.");
+  $("new-email").value = "";
+});
+
+// Two steps: the first submit emails a code, the second saves the password with that code.
+$("password-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  message("password-error");
+  message("password-notice");
+  const password = $("new-password").value;
+  if (password.length < 8) return message("password-error", "Password must be at least 8 characters long.");
+  const button = $("password-submit");
+  button.disabled = true;
+  try {
+    if ($("password-code-field").hidden) {
+      const { error } = await supabase.auth.reauthenticate();
+      if (error) throw error;
+      $("password-code-field").hidden = false;
+      button.textContent = "Save new password";
+      message("password-notice", "Enter the code we just emailed you.");
+    } else {
+      const { error } = await supabase.auth.updateUser({ password, nonce: $("password-code").value.trim() });
+      if (error) throw error;
+      $("password-form").reset();
+      $("password-code-field").hidden = true;
+      button.textContent = "Email me a code";
+      message("password-notice", "Your password has been changed.");
+    }
+  } catch (err) {
+    message("password-error", err.message || "Couldn't change your password. Please try again.");
+  } finally {
+    button.disabled = false;
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Delete account
 // ---------------------------------------------------------------------------
 
-// Accounts made with Google have no password; delete-account checks for a recent sign-in instead.
-let hasPassword = true;
-
 function updateDeleteButton() {
-  $("delete-submit").disabled = !((!hasPassword || $("delete-password").value) && $("delete-confirm").value === "DELETE");
+  $("delete-submit").disabled = !($("delete-code").value.trim() && $("delete-confirm").value === "DELETE");
 }
-$("delete-password").addEventListener("input", updateDeleteButton);
+$("delete-code").addEventListener("input", updateDeleteButton);
 $("delete-confirm").addEventListener("input", updateDeleteButton);
+
+// A one-time code to this account's address, so this works for password and Google accounts alike.
+$("delete-send-code").addEventListener("click", async () => {
+  message("delete-error");
+  message("delete-notice");
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return message("delete-error", "Your session has ended. Please sign in again.");
+  const { error } = await supabase.auth.signInWithOtp({ email: session.user.email, options: { shouldCreateUser: false } });
+  if (error) return message("delete-error", error.message);
+  message("delete-notice", `We sent a code to ${session.user.email}.`);
+});
 
 $("delete-form").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -331,7 +437,7 @@ $("delete-form").addEventListener("submit", async (event) => {
         apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify({ password: hasPassword ? $("delete-password").value : undefined, confirm: $("delete-confirm").value }),
+      body: JSON.stringify({ code: $("delete-code").value.trim(), confirm: $("delete-confirm").value }),
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok || !result.deleted) throw new Error(result.error || "Could not delete the account.");
@@ -351,6 +457,7 @@ $("delete-form").addEventListener("submit", async (event) => {
 
 let deleted = false;
 let shownUser = null;
+let emailConfirmed = false;
 
 function render(session) {
   if (deleted) return;
@@ -361,9 +468,13 @@ function render(session) {
     show("auth-view");
     return;
   }
+  if (recovering) return show("reset-view");
   if (shownUser === user.id) return;
   shownUser = user.id;
+  emailConfirmed = Boolean(user.email_confirmed_at);
   if (APP_CHALLENGE) {
+    $("app-unconfirmed").hidden = emailConfirmed;
+    $("app-continue").disabled = !emailConfirmed;
     $("app-email").textContent = `Signed in as ${user.email ?? "your account"}`;
     $("app-done").hidden = true;
     message("app-error");
@@ -371,9 +482,10 @@ function render(session) {
     return;
   }
   $("account-email").textContent = user.email ?? "";
-  hasPassword = (user.identities ?? []).some((identity) => identity.provider === "email");
-  $("delete-password-field").hidden = !hasPassword;
-  $("delete-recent").hidden = hasPassword;
+  const hasPassword = (user.identities ?? []).some((identity) => identity.provider === "email");
+  $("security-password").hidden = !hasPassword;
+  $("security-google").hidden = hasPassword;
+  $("verify-banner").hidden = emailConfirmed;
   $("delete-form").reset();
   updateDeleteButton();
   show("account-view");
@@ -383,4 +495,7 @@ function render(session) {
 if (new URLSearchParams(location.search).get("mode") === "signup") setMode("signup");
 else if (APP_CHALLENGE) setMode("signin");
 
-supabase.auth.onAuthStateChange((_event, session) => render(session));
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === "PASSWORD_RECOVERY") recovering = true;
+  render(session);
+});

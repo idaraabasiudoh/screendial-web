@@ -427,6 +427,10 @@ a {
   cursor: pointer;
 }
 
+#password-form {
+  margin-top: 24px;
+}
+
 .account-google {
   width: 100%;
   max-width: 400px;
