@@ -292,6 +292,15 @@ a {
   transition: transform 1.5s var(--ease);
 }
 
+.demo-cursor.tag-left {
+  flex-direction: row-reverse;
+  translate: calc(-100% + 30px) 0;
+}
+
+.demo-cursor.tag-left span {
+  margin: 20px -4px 0 0;
+}
+
 .demo-cursor span {
   margin: 20px 0 0 -4px;
   padding: 3px 8px;
@@ -391,7 +400,6 @@ a {
   gap: 24px;
   margin: 0 var(--gutter);
   padding: 18px 0 24px;
-  border-top: 1px solid var(--line);
 }
 
 .wordmark {
