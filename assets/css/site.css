@@ -23,6 +23,18 @@
   padding: 0;
 }
 
+/* Screendial's blue pointer everywhere, except where text is typed. */
+*,
+*::before,
+*::after {
+  cursor: -webkit-image-set(url("/assets/brand/cursor.png") 1x, url("/assets/brand/cursor@2x.png") 2x) 4 4, url("/assets/brand/cursor.png") 4 4, auto !important;
+}
+
+input,
+textarea {
+  cursor: text !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -292,40 +304,6 @@ a {
   transition: transform 1.5s var(--ease);
 }
 
-/* the demo pointer is the visitor's cursor now, at any width */
-.demo-cursor.following {
-  display: flex;
-  animation: none;
-}
-
-.demo-cursor.away {
-  opacity: 0;
-}
-
-.hero.own-cursor,
-.hero.own-cursor * {
-  cursor: none !important;
-}
-
-.demo-cursor.tag-left {
-  flex-direction: row-reverse;
-  translate: calc(-100% + 30px) 0;
-}
-
-.demo-cursor.tag-left span {
-  margin: 20px -4px 0 0;
-}
-
-.demo-cursor span {
-  margin: 20px 0 0 -4px;
-  padding: 3px 8px;
-  border-radius: 8px;
-  background: var(--blue);
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
 .downloads {
   display: flex;
   flex-direction: column;
@@ -469,7 +447,7 @@ a {
   }
 
   /* no room to travel when the columns stack */
-  .demo-cursor:not(.following) {
+  .demo-cursor {
     display: none;
   }
 
