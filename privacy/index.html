@@ -50,23 +50,24 @@
     <ul>
       <li><strong>Account information.</strong> Your email address, and either a securely stored password or, if you sign in with Google, your Google account's name, email address and profile picture. We use this only to sign you in.</li>
       <li><strong>Screenshots.</strong> When you ask Screendial a question, it takes a screenshot of each of your displays and sends it, with your question, to be analyzed. Screenshots are taken only when you send a question, not continuously.</li>
-      <li><strong>Voice.</strong> When you use the microphone or say "Screendial", your recording is sent to be transcribed. When speaker output is on, the response text is sent to be turned into speech.</li>
+      <li><strong>Screen recordings (Pro and Organization plans).</strong> When you press the record button, Screendial records the display your mouse is on until you stop it or it reaches the time or size limit (up to 5 minutes). When it ends, the video is sent to be analyzed, with your question and a new screenshot of each display. A recording captures whatever appears on that display while it runs, including notifications, messages and anything you type that is visible, so stop or cancel it before showing anything private. Screendial never records your screen unless you start a recording, and a countdown shows while it runs. If your microphone is available, it stays open during a recording. Your voice is sent only if you leave it on or turn it on during that recording; it is sent as described under Voice.</li>
+      <li><strong>Voice.</strong> When you use the microphone or say "Screendial", your recording is sent to be transcribed. If transcription fails, the audio is sent directly to our AI provider instead. When speaker output is on, the response text is sent to be turned into speech.</li>
       <li><strong>Wake word.</strong> While Screendial is open, it listens for the word "Screendial" on your device. This listening happens locally and is not recorded or sent anywhere until the wake word is detected.</li>
       <li><strong>Conversation history.</strong> Your recent questions and Screendial's answers are kept on your device so follow-up questions have context. Clearing the conversation in the app, or restarting it, starts a fresh conversation.</li>
-      <li><strong>Memory.</strong> Your newest 100 typed or transcribed questions, with Screendial's answers, are stored in your account so Screendial can use earlier conversations in later ones. Recent ones are sent to our AI provider with your requests. Memory never includes screenshots or audio. You can delete it from your account page.</li>
-      <li><strong>Request logs.</strong> For each question, we keep a log of the request and response: your question as text, the name of the app you were using, the names and sizes of your displays, what Screendial's AI models were given and answered at each step (including the actions it chose and their results), any errors, and timings. Logs never contain your screenshots or voice recordings, only their file sizes.</li>
+      <li><strong>Memory.</strong> Your newest 100 typed or transcribed questions, with Screendial's answers, are stored in your account so Screendial can use earlier conversations in later ones. Recent ones are sent to our AI provider with your requests. Memory never includes screenshots, screen recordings or audio. You can delete it from your account page.</li>
+      <li><strong>Request logs.</strong> For each question, we keep a log of the request and response: your question as text, the name of the app you were using, the names and sizes of your displays, what Screendial's AI models were given and answered at each step (including the actions it chose and their results), any errors, and timings. Logs never contain your screenshots, screen recordings or voice recordings, only their file sizes and, for screen recordings, their length.</li>
       <li><strong>Plan and usage.</strong> Your plan, how many questions you've asked each month (to apply your plan's monthly limit), and, if you subscribe, your subscription status and renewal date. Payments are handled by Stripe; we never see or store your full card number.</li>
       <li><strong>App context.</strong> The name of the app you're using, so Screendial can tailor its guidance.</li>
     </ul>
 
     <h2>How we use it</h2>
-    <p>We use this information only to provide Screendial: to sign you in, to apply your plan and bill your subscription, to answer your questions about your screen, to transcribe and speak responses, and to keep your conversation history. We use request logs to debug problems and improve Screendial. A small number of authorized Gropad staff can review these logs for those purposes. We do not sell your information, and we do not use it for advertising.</p>
+    <p>We use this information only to provide Screendial: to sign you in, to apply your plan and bill your subscription, to answer your questions about your screen, including screen recordings you choose to send, to transcribe and speak responses, and to keep your conversation history. We use request logs to debug problems and improve Screendial. A small number of authorized Gropad staff can review these logs for those purposes. We do not sell your information, and we do not use it for advertising.</p>
 
     <h2>Service providers</h2>
     <p>Screendial relies on a small number of providers to process your requests:</p>
     <ul>
       <li><strong>Supabase</strong>: account sign-in, request log storage, and the secure servers that relay your requests.</li>
-      <li><strong>Google (Gemini)</strong>: analyzes your screenshots and questions to produce answers.</li>
+      <li><strong>Google (Gemini)</strong>: analyzes your screenshots, screen recordings and questions to produce answers.</li>
       <li><strong>Google (Sign in with Google)</strong>: if you choose it, confirms your identity and shares your name, email address and profile picture with us.</li>
       <li><strong>ElevenLabs</strong>: transcribes your voice and generates spoken responses.</li>
       <li><strong>Stripe</strong>: processes subscription payments and stores your payment details.</li>
@@ -77,7 +78,7 @@
     <p>Your account and request logs are stored with Supabase in the United States (US East). Your requests are also processed by Google and ElevenLabs, which may handle them in other locations under their own terms.</p>
 
     <h2>Training</h2>
-    <p>Gropad does not use your screenshots, voice, or conversations to train AI models.</p>
+    <p>Gropad does not use your screenshots, screen recordings, voice, or conversations to train AI models.</p>
     <!-- TODO(confirm): Before adding provider-level claims, confirm in the provider dashboards:
          - Google: the GEMINI_API_KEY used by the Supabase edge functions (model-proxy-layer-1,
            model-proxy-layer-2, highlight-coordinates) calls the Gemini API
@@ -92,7 +93,7 @@
     <p>Screendial asks your operating system for screen recording and microphone access. You can revoke either at any time in your system settings; the related features will stop working until access is restored.</p>
 
     <h2>Retention and deletion</h2>
-    <p>Screenshots and voice recordings are used to answer your request and are not stored by Screendial afterwards. Clearing the conversation in the app starts a fresh conversation but doesn't delete memory, which you can delete separately from your account page. Past conversations are kept in our request logs until you delete your account, and are then deleted with it. Monthly question counts and subscription records are kept until you delete your account; Stripe keeps payment records as required for tax and accounting. Deleting your account cancels any active subscription. You can export your history and delete your account and its data at any time from <a href="/account/">your account page</a>, or by contacting us at <a href="mailto:support@gropad.com">support@gropad.com</a>.</p>
+    <p>Screenshots, screen recordings and voice recordings are used to answer your request and are not stored by Screendial afterwards. A cancelled screen recording is discarded without being sent. Clearing the conversation in the app starts a fresh conversation but doesn't delete memory, which you can delete separately from your account page. Past conversations are kept in our request logs until you delete your account, and are then deleted with it. Monthly question counts and subscription records are kept until you delete your account; Stripe keeps payment records as required for tax and accounting. Deleting your account cancels any active subscription. You can export your history and delete your account and its data at any time from <a href="/account/">your account page</a>, or by contacting us at <a href="mailto:support@gropad.com">support@gropad.com</a>.</p>
 
     <h2>Security</h2>
     <p>Data is sent over encrypted connections, and access to stored data is restricted to your account and to the authorized Gropad staff described above. No system is perfectly secure, but we work to protect your information.</p>
