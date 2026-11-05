@@ -301,7 +301,7 @@ async function loadPlan() {
     summary += " Your last payment didn't go through; update your payment method to keep Pro.";
   }
   $("plan-summary").textContent = summary;
-  $("plan-usage").textContent = `${plan.used_this_month} of ${plan.monthly_queries} questions used this month. The count resets on the 1st.`;
+  $("plan-usage").textContent = `${Math.min(plan.used_this_month, plan.monthly_queries)} of ${plan.monthly_queries} questions used this month. The count resets on the 1st.`;
   $("plan-usage").hidden = false;
 
   // subscribing needs a confirmed email address; the billing function checks again
