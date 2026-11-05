@@ -131,6 +131,9 @@ $("sign-out").addEventListener("click", () => supabase.auth.signOut());
 // Hand this sign-in to the Screendial app
 // ---------------------------------------------------------------------------
 
+/** Kept out of the page: only the Copy button uses it. */
+let appCode = "";
+
 $("app-continue").addEventListener("click", async () => {
   message("app-error");
   const button = $("app-continue");
@@ -138,7 +141,8 @@ $("app-continue").addEventListener("click", async () => {
   try {
     const { ok, result } = await callFunction("app-auth", { action: "issue", challenge: APP_CHALLENGE });
     if (!ok || !result.code) throw new Error(result.error || "Could not sign in to the app.");
-    $("app-code").textContent = result.code;
+    appCode = result.code;
+    $("app-copy").textContent = "Copy";
     $("app-done").hidden = false;
     location.href = `screendial://auth/callback?code=${encodeURIComponent(result.code)}`;
   } catch (err) {
@@ -148,7 +152,14 @@ $("app-continue").addEventListener("click", async () => {
   }
 });
 
-$("app-copy").addEventListener("click", () => navigator.clipboard?.writeText($("app-code").textContent));
+$("app-copy").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(appCode);
+    $("app-copy").textContent = "Copied";
+  } catch {
+    $("app-copy").textContent = "Couldn't copy. Try again";
+  }
+});
 $("app-switch").addEventListener("click", () => supabase.auth.signOut());
 
 // ---------------------------------------------------------------------------

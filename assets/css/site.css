@@ -556,11 +556,6 @@ body:has(.account) {
   border-top: 1px solid var(--line);
 }
 
-.account-code code {
-  font-size: 13px;
-  word-break: break-all;
-}
-
 .account .account-delete {
   background: #ef4444;
   color: var(--white);
@@ -589,13 +584,18 @@ body:has(.account) {
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 28px;
   font-size: 14px;
   color: var(--text-dim);
 }
 
 .legal.account .account-switch + .account-switch {
   margin-top: 8px;
+}
+
+.account-link-gap {
+  display: block;
+  margin-top: 16px;
 }
 
 .link-button {

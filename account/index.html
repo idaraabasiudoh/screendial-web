@@ -106,10 +106,10 @@
       <p class="account-error" id="app-error" role="alert" hidden></p>
       <div id="app-done" hidden>
         <p class="account-notice" role="status">Screendial should open and finish signing you in. You can close this tab.</p>
-        <p class="updated">Didn't open? Copy this code into the Screendial sign-in window. It works once, for five minutes.</p>
-        <p class="account-code"><code id="app-code"></code> <button type="button" class="link-button" id="app-copy">Copy</button></p>
+        <p class="updated">Didn't open? Copy your sign-in code and paste it into the Screendial sign-in window. It works once, for five minutes.</p>
+        <p class="account-code"><button type="button" class="link-button" id="app-copy">Copy</button></p>
       </div>
-      <p><a href="/account/">Go to your account instead</a></p>
+      <p class="account-switch"><a href="/account/">Go to your account instead</a></p>
     </section>
 
     <!-- Signed in -->
@@ -124,7 +124,7 @@
 
       <div id="verify-banner" hidden>
         <p class="account-notice" role="status">Confirm your email address to ask Screendial questions and subscribe to a plan.</p>
-        <button type="button" class="link-button" id="verify-resend">Resend confirmation email</button>
+        <button type="button" class="link-button account-link-gap" id="verify-resend">Resend confirmation email</button>
       </div>
 
       <h2>Plan</h2>
