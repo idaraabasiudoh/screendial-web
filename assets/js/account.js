@@ -241,6 +241,23 @@ $("export-json").addEventListener("click", () => exportHistory("json"));
 $("export-text").addEventListener("click", () => exportHistory("text"));
 
 // ---------------------------------------------------------------------------
+// Memory: what Screendial carries between conversations. Row-level security limits this to the
+// signed-in user's rows. History exports and request logs are separate.
+// ---------------------------------------------------------------------------
+
+$("memory-clear").addEventListener("click", async () => {
+  message("memory-error");
+  message("memory-notice");
+  if (!confirm("Delete everything Screendial remembers? This can't be undone.")) return;
+  const button = $("memory-clear");
+  button.disabled = true;
+  const { error } = await supabase.from("conversation_memory").delete().not("id", "is", null);
+  button.disabled = false;
+  if (error) return message("memory-error", "Couldn't delete your memory. Please try again.");
+  message("memory-notice", "Screendial's memory is deleted.");
+});
+
+// ---------------------------------------------------------------------------
 // Plan: this month's usage, and Stripe Checkout / customer portal through the billing function
 // ---------------------------------------------------------------------------
 
