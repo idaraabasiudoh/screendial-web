@@ -292,6 +292,21 @@ a {
   transition: transform 1.5s var(--ease);
 }
 
+/* the demo pointer is the visitor's cursor now, at any width */
+.demo-cursor.following {
+  display: flex;
+  animation: none;
+}
+
+.demo-cursor.away {
+  opacity: 0;
+}
+
+.hero.own-cursor,
+.hero.own-cursor * {
+  cursor: none !important;
+}
+
 .demo-cursor.tag-left {
   flex-direction: row-reverse;
   translate: calc(-100% + 30px) 0;
@@ -454,7 +469,7 @@ a {
   }
 
   /* no room to travel when the columns stack */
-  .demo-cursor {
+  .demo-cursor:not(.following) {
     display: none;
   }
 
