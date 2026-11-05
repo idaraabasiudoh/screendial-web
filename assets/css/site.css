@@ -8,6 +8,10 @@
   --line: rgba(255, 255, 255, 0.14);
   --blue: #3b82f6;
   --gutter: clamp(20px, 4vw, 56px);
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-line: rgba(255, 255, 255, 0.16);
+  --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 12px 40px rgba(0, 0, 0, 0.28);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   color-scheme: dark;
 }
 
@@ -81,19 +85,52 @@ a {
 
 /* shown until videos/background.mp4 is uploaded (and behind it while it loads) */
 .hero-fallback {
-  background:
-    radial-gradient(60% 50% at 70% 40%, rgba(59, 130, 246, 0.22), transparent 70%),
-    radial-gradient(50% 40% at 20% 80%, rgba(255, 255, 255, 0.06), transparent 70%),
-    #050506;
+  overflow: hidden;
+  background: #04050a;
 }
 
-/* keeps white text readable over any video */
+/* Two soft lights drifting slowly. Only transforms animate, to stay light on the GPU. */
+.hero-fallback::before,
+.hero-fallback::after {
+  content: "";
+  position: absolute;
+  width: 75vmax;
+  height: 75vmax;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.hero-fallback::before {
+  top: -30vmax;
+  right: -15vmax;
+  background: radial-gradient(closest-side, rgba(59, 130, 246, 0.5), transparent);
+  animation: drift-one 24s ease-in-out infinite alternate;
+}
+
+.hero-fallback::after {
+  bottom: -40vmax;
+  left: -20vmax;
+  background: radial-gradient(closest-side, rgba(124, 92, 246, 0.36), transparent);
+  animation: drift-two 30s ease-in-out infinite alternate;
+}
+
+@keyframes drift-one {
+  to { transform: translate(-16vmax, 12vmax) scale(1.12); }
+}
+
+@keyframes drift-two {
+  to { transform: translate(18vmax, -10vmax) scale(0.92); }
+}
+
+/* keeps white text readable over any video, with a little grain to stop the lights banding */
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 45%, rgba(0, 0, 0, 0.75) 100%);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 45%, rgba(0, 0, 0, 0.6) 100%);
   pointer-events: none;
 }
 
@@ -115,25 +152,32 @@ a {
   align-items: center;
   height: 40px;
   padding: 0 18px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--glass-line);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--glass);
+  box-shadow: var(--glass-edge);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  transition: opacity 0.15s;
+  transition: transform 0.2s var(--ease), background 0.2s, box-shadow 0.2s;
 }
 
 .auth-button:hover {
-  opacity: 0.88;
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
 }
 
-.auth-button--primary {
+.auth-button--primary,
+.auth-button--primary:hover {
   border-color: var(--white);
   background: var(--white);
   color: var(--black);
+}
+
+.auth-button--primary:hover {
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.22);
 }
 
 .hero-middle {
@@ -149,15 +193,126 @@ a {
   font-size: clamp(44px, 7vw, 96px);
   font-weight: 600;
   line-height: 1.02;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #ffffff 35%, rgba(255, 255, 255, 0.68) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-lead {
+  display: grid;
+  gap: clamp(20px, 3vh, 32px);
+  min-width: 0;
+}
+
+.hero-lead > * {
+  animation: rise 0.8s var(--ease) both;
+}
+
+.hero-lead > .demo-bar {
+  animation-delay: 0.12s;
+}
+
+.downloads {
+  animation: rise 0.8s 0.2s var(--ease) both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+/* a picture of the app's input bar */
+.demo-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 460px);
+  height: 52px;
+  padding: 0 8px 0 16px;
+  border: 1px solid var(--glass-line);
+  border-radius: 26px;
+  background: var(--glass);
+  box-shadow: var(--glass-edge);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  user-select: none;
+}
+
+.demo-logo {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.demo-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-dim);
+  font-size: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.demo-icon {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  color: var(--text-dim);
+}
+
+.demo-send {
+  flex: none;
+  padding: 8px 16px;
+  border-radius: 18px;
+  background: var(--blue);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* the app's pointer; home.js places it */
+.demo-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+}
+
+.demo-cursor.ready {
+  opacity: 1;
+  animation: rise 0.6s 0.5s var(--ease) backwards;
+}
+
+.demo-cursor.moving {
+  transition: transform 1.5s var(--ease);
+}
+
+.demo-cursor span {
+  margin: 20px 0 0 -4px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: var(--blue);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .downloads {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
-  text-align: right;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--glass-line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: var(--glass-edge);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
 }
 
 /* The hidden attribute must win over display rules like .download's inline-flex. */
@@ -194,6 +349,28 @@ a {
   -webkit-backdrop-filter: blur(12px);
 }
 
+.hero .download {
+  width: 100%;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s, background 0.2s;
+}
+
+.hero .download:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(255, 255, 255, 0.2);
+}
+
+.hero .download--secondary {
+  border-color: var(--glass-line);
+  background: var(--glass);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.hero .download--secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
 .download svg {
   width: 20px;
   height: 20px;
@@ -201,25 +378,27 @@ a {
 }
 
 .downloads-note {
-  margin-top: 6px;
-  font-size: 15px;
+  margin: 6px 4px 2px;
+  font-size: 14px;
   line-height: 1.45;
   color: var(--text-dim);
 }
 
 .hero-bottom {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: end;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 24px;
-  padding: 0 var(--gutter) 32px;
+  margin: 0 var(--gutter);
+  padding: 18px 0 24px;
+  border-top: 1px solid var(--line);
 }
 
 .wordmark {
-  font-size: clamp(24px, 3vw, 8px);
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  color: rgba(255, 255, 255);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-dim);
 }
 
 .legal-links {
@@ -261,14 +440,49 @@ a {
   }
 
   .hero-bottom {
-    grid-template-columns: 1fr;
-    gap: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* no room to travel when the columns stack */
+  .demo-cursor {
+    display: none;
+  }
+
+  .demo-bar {
+    width: 100%;
   }
 
   .legal-links {
     flex-wrap: wrap;
     gap: 12px 24px;
     padding-bottom: 0;
+  }
+}
+
+/* Short windows: keep everything on one screen. */
+@media (max-height: 640px) and (min-width: 821px) {
+  .headline {
+    font-size: clamp(40px, 6vw, 64px);
+  }
+
+  .hero-middle {
+    padding-block: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fallback::before,
+  .hero-fallback::after,
+  .hero-lead > *,
+  .downloads,
+  .demo-cursor.ready {
+    animation: none;
+  }
+
+  .demo-cursor.moving {
+    transition: none;
   }
 }
 

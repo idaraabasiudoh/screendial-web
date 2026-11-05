@@ -76,10 +76,20 @@
     </header>
 
     <section class="hero-middle">
-      <h1 class="headline">Understand anything on your screen</h1>
+      <div class="hero-lead">
+        <h1 class="headline">Understand anything on your screen</h1>
+
+        <!-- A picture of the app's input bar, not a working control -->
+        <div class="demo-bar" aria-hidden="true">
+          <span class="demo-logo">s.</span>
+          <span class="demo-text">How do I export this?</span>
+          <svg class="demo-icon demo-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11a6.500 6.500 0 0 0 13 0"/><path d="M12 17.500V21"/><path d="M8.500 21h7"/></svg>
+          <span class="demo-send">Send</span>
+        </div>
+      </div>
 
       <div class="downloads">
-        <a class="download" href="https://github.com/idaraabasiudoh/screendial-web/releases/latest/download/Screendial.dmg">
+        <a class="download" id="download-mac" href="https://github.com/idaraabasiudoh/screendial-web/releases/latest/download/Screendial.dmg">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.67c-.03-2.7 2.2-4 2.3-4.06-1.25-1.83-3.2-2.08-3.9-2.11-1.66-.17-3.24.98-4.08.98-.85 0-2.15-.95-3.53-.93-1.81.03-3.49 1.06-4.42 2.68-1.89 3.27-.48 8.11 1.35 10.77.9 1.3 1.97 2.750 3.37 2.7 1.35-.05 1.86-.87 3.5-.87 1.62 0 2.09.87 3.51.84 1.46-.03 2.38-1.32 3.27-2.62 1.03-1.5 1.45-2.96 1.48-3.04-.03-.01-2.84-1.09-2.85-4.34zM13.7 4.73c.74-.9 1.25-2.150 1.11-3.4-1.07.04-2.37.72-3.14 1.61-.69.79-1.29 2.06-1.13 3.29 1.19.09 2.42-.61 3.16-1.5z"/></svg>
           Download for Mac
         </a>
@@ -99,6 +109,13 @@
         <li><a href="/terms-of-use/">Terms of Use</a></li>
       </ul>
     </footer>
+
+    <!-- The app's pointer, moving to the download button -->
+    <div class="demo-cursor" aria-hidden="true">
+      <svg width="30" height="30" viewBox="0 0 30 30"><path d="M4 4 L26 12 L15.500 15.500 L12 26 Z" fill="#3b82f6" stroke="#fff" stroke-width="3" stroke-linejoin="round" paint-order="stroke"/></svg>
+      <span>Screendial</span>
+    </div>
   </main>
+  <script src="/assets/js/home.js" defer></script>
 </body>
 </html>
